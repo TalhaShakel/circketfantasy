@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tempalteflutter/api/logout.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/main.dart';
 import 'package:tempalteflutter/modules/color/setColor.dart';
 import 'package:tempalteflutter/modules/notification/notificationScreen.dart';
@@ -643,9 +644,9 @@ class _AppDrawerState extends State<AppDrawer> {
     return Container(
       height: 54,
       child: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-          LogOut().logout(context);
+        onTap: ()async {
+          print("tap");
+        await  Mycontroller().logout(context);
         },
         child: Padding(
           padding: EdgeInsets.only(left: 14, right: 14),

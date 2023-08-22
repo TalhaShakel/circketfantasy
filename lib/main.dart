@@ -10,6 +10,8 @@ import 'package:tempalteflutter/modules/home/tabScreen.dart';
 import 'package:tempalteflutter/modules/login/loginScreen.dart';
 import 'package:tempalteflutter/modules/login/otpValidationScreen.dart';
 import 'package:tempalteflutter/modules/splash/SplashScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -37,8 +39,11 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
-void main() {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   Bloc.observer = SimpleBlocDelegate();
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
@@ -62,7 +67,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     globals.phoneVerificationBloc = PhoneVerificationBloc(PhoneVerificationBlocState.initial());
     globals.phoneVerificationBloc!.onInisialList("91", "phoneNoData");
-    FirstTime.getValues();
+    // FirstTime.getValues();
     super.initState();
   }
 
@@ -110,6 +115,6 @@ class _MyAppState extends State<MyApp> {
     Routes.SPLASH: (BuildContext context) => new SplashScreen(),
     Routes.LOGIN: (BuildContext context) => new LoginScreen(),
     Routes.TAB: (BuildContext context) => new TabScreen(),
-    Routes.OTP: (BuildContext context) => new OtpValidationScreen(),
+    Routes.OTP: (BuildContext context) => new OtpValidationScreen(verificationId: '',),
   };
 }

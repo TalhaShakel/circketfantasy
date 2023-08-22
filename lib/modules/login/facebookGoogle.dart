@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/modules/phoneauth/PhoneValidationScreen.dart';
 import 'package:tempalteflutter/validator/validator.dart';
 
@@ -46,7 +47,10 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                     child: InkWell(
                       borderRadius: new BorderRadius.circular(8.0),
                       onTap: () {
-                        setFaceBookLogin();
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => 
+                        PhoneValidationScreen(
+                          
+                        ),));
                       },
                       child: Padding(
                         padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -55,15 +59,15 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(
-                                FontAwesomeIcons.facebookF,
+                                FontAwesomeIcons.phone,
                                 size: 18,
-                                color: AllCoustomTheme.getThemeData().backgroundColor,
+                                color: AllCoustomTheme.getThemeData().cardColor,
                               ),
                               SizedBox(
                                 width: 8,
                               ),
                               Text(
-                                'Facebook',
+                                'Phone',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -91,7 +95,7 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                     child: InkWell(
                       borderRadius: new BorderRadius.circular(8.0),
                       onTap: () async {
-                        _handleSignIn(context);
+                       Mycontroller().handleGoogleLogin(context);
                       },
                       child: Padding(
                         padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -134,23 +138,13 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
     );
   }
 
-  void setFaceBookLogin() async {
-    FocusScope.of(context).requestFocus(new FocusNode());
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PhoneValidationScreen(),
-      ),
-    );
-  }
 }
 
-Future<void> _handleSignIn(context) async {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => PhoneValidationScreen(),
-    ),
-  );
-}
+// Future<void> _handleSignIn(context) async {
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//       builder: (context) => PhoneValidationScreen(),
+//     ),
+//   );
+// }

@@ -1,27 +1,53 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/modules/home/homeScreen.dart';
 import 'package:tempalteflutter/modules/login/continuebutton.dart';
 import 'package:tempalteflutter/modules/login/otpProgressView.dart';
 import 'package:tempalteflutter/modules/login/otpTimer.dart';
-import 'package:tempalteflutter/modules/register/registerScreen.dart';
 
 class OtpValidationScreen extends StatefulWidget {
+  const OtpValidationScreen({super.key, required this.verificationId});
+
   @override
   _OtpValidationScreenState createState() => _OtpValidationScreenState();
+
+  final String verificationId;
 }
 
-class _OtpValidationScreenState extends State<OtpValidationScreen> with TickerProviderStateMixin {
+class _OtpValidationScreenState extends State<OtpValidationScreen>
+    with TickerProviderStateMixin {
   var isLoginProsses = false;
   late AnimationController _animationController;
   var otpText = '';
   var istimeFinish = false;
   var otpTimerView = false;
   var otpController = new TextEditingController();
+
+  get verificationId => null;
+
+  void opt() async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: otpController.text.trim(),
+    );
+try{
+ await FirebaseAuth.instance
+        .signInWithCredential(credential)
+        .then((value) => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            )));
+}catch(e){
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+}
+   
+  }
 
   @override
   void initState() {
@@ -55,7 +81,8 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with TickerPr
                       child: Container(
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width,
-                          maxHeight: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+                          maxHeight: MediaQuery.of(context).size.height -
+                              MediaQuery.of(context).padding.top,
                         ),
                         child: Container(
                           child: Column(
@@ -72,7 +99,8 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with TickerPr
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 40,
-                                          color: AllCoustomTheme.getThemeData().primaryColor,
+                                          color: AllCoustomTheme.getThemeData()
+                                              .primaryColor,
                                         ),
                                       ),
                                     ),
@@ -91,30 +119,38 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with TickerPr
                                 child: Container(
                                   width: 130,
                                   decoration: new BoxDecoration(
-                                    color: AllCoustomTheme.getThemeData().backgroundColor,
+                                    color: AllCoustomTheme.getThemeData()
+                                        .backgroundColor,
                                     border: new Border.all(
                                       width: 1.0,
-                                      color: AllCoustomTheme.getTextThemeColors().withOpacity(0.5),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors()
+                                              .withOpacity(0.5),
                                     ),
                                   ),
                                   child: TextField(
-                                    cursorColor: AllCoustomTheme.getThemeData().primaryColor,
+                                    cursorColor: AllCoustomTheme.getThemeData()
+                                        .primaryColor,
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       letterSpacing: 10.0,
                                       fontSize: ConstanceData.SIZE_TITLE18,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                     maxLength: 6,
                                     keyboardType: TextInputType.number,
                                     decoration: new InputDecoration(
                                         enabledBorder: InputBorder.none,
                                         focusedBorder: InputBorder.none,
-                                        counterStyle: TextStyle(fontFamily: 'Poppins', color: Colors.transparent)),
+                                        counterStyle: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.transparent)),
                                     onEditingComplete: () {
-                                      FocusScope.of(context).requestFocus(FocusNode());
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
                                     },
                                     onChanged: (txt) {
                                       otpText = txt;
@@ -171,31 +207,30 @@ class _OtpValidationScreenState extends State<OtpValidationScreen> with TickerPr
                           child: Column(
                             children: <Widget>[
                               new SizeTransition(
-                                sizeFactor: new CurvedAnimation(parent: _animationController, curve: Curves.fastOutSlowIn),
+                                sizeFactor: new CurvedAnimation(
+                                    parent: _animationController,
+                                    curve: Curves.fastOutSlowIn),
                                 axis: Axis.horizontal,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(right: 14, left: 14, bottom: 14),
+                                  padding: const EdgeInsets.only(
+                                      right: 14, left: 14, bottom: 14),
                                   child: ContinueButton(
                                     name: 'Verify',
                                     callBack: () async {
-                                      FocusScope.of(context).requestFocus(new FocusNode());
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
 
-                                      setState(() {
-                                        isLoginProsses = true;
-                                      });
-                                      await Future.delayed(const Duration(seconds: 1));
+                                      opt();
+                                      // await Future.delayed(
+                                      //     const Duration(seconds: 1));
 
-                                      Fluttertoast.showToast(msg: "Your phone verification successful.");
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => RegisterScreen(),
-                                        ),
-                                      );
+                                      // Fluttertoast.showToast(
+                                      //     msg:
+                                      //         "Your phone verification successful.");
 
-                                      setState(() {
-                                        isLoginProsses = false;
-                                      });
+                                      // setState(() {
+                                      //   isLoginProsses = false;
+                                      // });
                                     },
                                   ),
                                 ),

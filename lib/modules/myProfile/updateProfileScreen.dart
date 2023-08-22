@@ -63,27 +63,27 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   void initState() {
-    loginUserData = widget.loginUserData!;
-    userNameController.text = "Enric";
-    emailController.text = "enric@gmail.com";
-    referCodeController.text = loginUserData.referral!;
-    phoneController.text = "+91 1234567890";
-    imageUrl = loginUserData.image!;
+    // loginUserData = widget.loginUserData!;
+    // userNameController.text = "Enric";
+    // emailController.text = "enric@gmail.com";
+    // referCodeController.text = loginUserData.referral!;
+    // phoneController.text = "+91 1234567890";
+    // imageUrl = loginUserData.image!;
 
-    if (loginUserData.gender == 'male') {
-      selectedGender = loginUserData.gender!;
-      genderListIndex = 0;
-    }
-    if (loginUserData.gender == 'female') {
-      selectedGender = loginUserData.gender!;
-      genderListIndex = 1;
-    }
+    // if (loginUserData.gender == 'male') {
+    //   selectedGender = loginUserData.gender!;
+    //   genderListIndex = 0;
+    // }
+    // if (loginUserData.gender == 'female') {
+    //   selectedGender = loginUserData.gender!;
+    //   genderListIndex = 1;
+    // }
 
-    date = DateFormat.yMd().parse(loginUserData.dob!);
-    slectedState = StateList(name: 'selecte your state');
-    stateList.insert(0, slectedState);
-    slectedCity = CityList(name: 'selecte your city');
-    cityList.insert(0, slectedCity);
+    // date = DateFormat.yMd().parse(loginUserData.dob!);
+    // slectedState = StateList(name: 'selecte your state');
+    // stateList.insert(0, slectedState);
+    // slectedCity = CityList(name: 'selecte your city');
+    // cityList.insert(0, slectedCity);
     super.initState();
   }
 

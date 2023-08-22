@@ -9,7 +9,7 @@ import 'package:tempalteflutter/modules/login/facebookGoogle.dart';
 import 'package:tempalteflutter/modules/login/sliderView.dart';
 
 var loginUserData = UserData();
-
+// 
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();

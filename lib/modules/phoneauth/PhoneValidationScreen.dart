@@ -1,29 +1,38 @@
 // ignore_for_file: unused_element, deprecated_member_use
 
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tempalteflutter/bloc/phoneEnteryBloc.dart';
 import 'package:tempalteflutter/bloc/phoneVerificationBloc.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/modules/login/continuebutton.dart';
 import 'package:tempalteflutter/constance/global.dart' as globals;
+import 'package:tempalteflutter/modules/login/otpTimer.dart';
 import 'package:tempalteflutter/modules/login/otpValidationScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 var selectedCountryCode = '91';
 
 class PhoneValidationScreen extends StatefulWidget {
+  const PhoneValidationScreen({
+    super.key,
+  });
+
   @override
   _PhoneValidationScreenState createState() => _PhoneValidationScreenState();
 }
 
-class _PhoneValidationScreenState extends State<PhoneValidationScreen> with TickerProviderStateMixin {
+class _PhoneValidationScreenState extends State<PhoneValidationScreen>
+    with TickerProviderStateMixin {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   late AnimationController _animationController;
 
   final phoneEntryBloc = PhoneEntryBloc(PhoneEntryBlocState.initial());
@@ -39,8 +48,10 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
 
   @override
   void initState() {
-    globals.phoneVerificationBloc = PhoneVerificationBloc(PhoneVerificationBlocState.initial());
-    _animationController = new AnimationController(vsync: this, duration: new Duration(milliseconds: 400));
+    // globals.phoneVerificationBloc =
+    //     PhoneVerificationBloc(PhoneVerificationBlocState.initial());
+    // _animationController = new AnimationController(
+    //     vsync: this, duration: new Duration(milliseconds: 400));
     super.initState();
   }
 
@@ -104,7 +115,8 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE12,
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                   TextSpan(
@@ -112,11 +124,13 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE12,
-                                      color: AllCoustomTheme.getThemeData().primaryColor,
+                                      color: AllCoustomTheme.getThemeData()
+                                          .primaryColor,
                                     ),
                                     recognizer: new TapGestureRecognizer()
                                       ..onTap = () async {
-                                        const url = ConstanceData.TermsofService;
+                                        const url =
+                                            ConstanceData.TermsofService;
                                         if (await canLaunch(url)) {
                                           await launch(url);
                                         } else {
@@ -129,7 +143,8 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE12,
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                   TextSpan(
@@ -137,7 +152,8 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE12,
-                                      color: AllCoustomTheme.getThemeData().primaryColor,
+                                      color: AllCoustomTheme.getThemeData()
+                                          .primaryColor,
                                     ),
                                     recognizer: new TapGestureRecognizer()
                                       ..onTap = () async {
@@ -154,7 +170,8 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE12,
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                 ],
@@ -172,21 +189,31 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                       child: ContinueButton(
                         name: "Next",
                         callBack: () async {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          setState(() {
-                            isLoginProsses = true;
-                          });
-                          await Future.delayed(const Duration(seconds: 1));
-                          Fluttertoast.showToast(msg: "Your phone verification successful.");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OtpValidationScreen(),
-                            ),
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: countryCode + phonNumberContorller.text.trim() ,
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) async{
+                                  await auth.signInWithCredential(credential);
+                                },
+                            verificationFailed: (FirebaseAuthException e) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message!)));
+
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OtpValidationScreen(
+                                      verificationId: verificationId,
+                                    ),
+                                  ));
+                            },
+                            codeAutoRetrievalTimeout:
+                                (String verificationId) {},
                           );
-                          setState(() {
-                            isLoginProsses = false;
-                          });
+
+
                         },
                       ),
                     ),
@@ -272,8 +299,11 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
               padding: EdgeInsets.only(left: 16),
               child: BlocBuilder(
                 bloc: phoneEntryBloc,
-                builder: (BuildContext context, PhoneEntryBlocState state) => Theme(
-                  data: AllCoustomTheme.buildLightTheme().copyWith(backgroundColor: Colors.transparent, scaffoldBackgroundColor: Colors.transparent),
+                builder: (BuildContext context, PhoneEntryBlocState state) =>
+                    Theme(
+                  data: AllCoustomTheme.buildLightTheme().copyWith(
+                      backgroundColor: Colors.transparent,
+                      scaffoldBackgroundColor: Colors.transparent),
                   child: TextField(
                     controller: phonNumberContorller,
                     style: TextStyle(
@@ -286,8 +316,10 @@ class _PhoneValidationScreenState extends State<PhoneValidationScreen> with Tick
                     keyboardType: TextInputType.number,
                     decoration: new InputDecoration(
                       labelText: 'Mobile Number',
-                      errorText: state.isPhoneError ? 'phone length should be proper.' : null,
-                      prefix: Text("+$countryCode"),
+                      errorText: state.isPhoneError
+                          ? 'phone length should be proper.'
+                          : null,
+                      prefix: Text("$countryCode"),
                     ),
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(FocusNode());

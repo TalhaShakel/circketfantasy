@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:tempalteflutter/auth/auth.dart';
 import 'package:tempalteflutter/constance/routes.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 
@@ -13,17 +14,21 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
-    _loadNextScreen();
+    // _loadNextScreen();
     animationController = new AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     animationController.forward();
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => const  Authpage(),
+        ));
+      },
+    );
     super.initState();
   }
 
-  void _loadNextScreen() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    Navigator.pushReplacementNamed(context, Routes.LOGIN);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

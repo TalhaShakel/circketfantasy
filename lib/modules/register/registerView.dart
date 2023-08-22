@@ -2,10 +2,13 @@
 
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/controller/registercontroller.dart';
 import 'package:tempalteflutter/models/cityResponseData.dart';
 import 'package:tempalteflutter/models/countryResponseData.dart';
 import 'package:tempalteflutter/models/stateResponseData.dart';
@@ -22,6 +25,7 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+ var _auth = FirebaseAuth.instance.currentUser!;
   var countryList = <CountryList>[];
   var stateList = <StateList>[];
   var cityList = <CityList>[];
@@ -31,6 +35,10 @@ class _RegisterViewState extends State<RegisterView> {
   var emailController = new TextEditingController();
   var referCodeController = new TextEditingController();
   var phoneController = new TextEditingController();
+  var dobcontorller = new TextEditingController();
+  var statecontroller = new TextEditingController();
+  var citycontroller = new TextEditingController();
+  var gendercontroller = new TextEditingController();
 
   var userNameFocusNode = FocusNode();
   var emailFocusNode = FocusNode();
@@ -98,7 +106,8 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
@@ -106,14 +115,15 @@ class _RegisterViewState extends State<RegisterView> {
                                     keyboardType: TextInputType.text,
                                     controller: userNameController,
                                     decoration: InputDecoration(
-                                      hintText: "User Name",
+                                      hintText: _auth.displayName,
                                       fillColor: Colors.black,
                                       border: InputBorder.none,
                                     ),
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -127,7 +137,8 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
@@ -141,7 +152,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -155,11 +167,13 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
                                   child: TextField(
+                                    controller: dobcontorller,
                                     keyboardType: TextInputType.emailAddress,
                                     decoration: InputDecoration(
                                       hintText: "Date of Birth",
@@ -169,7 +183,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -183,11 +198,13 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
                                   child: TextField(
+                                    controller: gendercontroller,
                                     keyboardType: TextInputType.emailAddress,
                                     decoration: InputDecoration(
                                       hintText: "Gender",
@@ -197,7 +214,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -211,11 +229,13 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
                                   child: TextField(
+                                    controller: statecontroller,
                                     decoration: InputDecoration(
                                       hintText: "Enter State Name",
                                       fillColor: Colors.black,
@@ -224,7 +244,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -238,11 +259,13 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
                                   child: TextField(
+                                    controller: citycontroller,
                                     decoration: InputDecoration(
                                       hintText: "Enter City Name",
                                       fillColor: Colors.black,
@@ -251,7 +274,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -265,11 +289,13 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
                                   child: TextField(
+                                    controller: referCodeController,
                                     decoration: InputDecoration(
                                       hintText: "Refer Code",
                                       fillColor: Colors.black,
@@ -278,7 +304,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -292,11 +319,13 @@ class _RegisterViewState extends State<RegisterView> {
                             height: 60,
                             child: Card(
                               elevation: 8,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12),
                                 child: Center(
                                   child: TextField(
+                                    controller: phoneController,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
                                       hintText: "Phone Number",
@@ -306,7 +335,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: ConstanceData.SIZE_TITLE16,
-                                      color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                      color: AllCoustomTheme
+                                          .getBlackAndWhiteThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -320,12 +350,25 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 14, left: 14, bottom: 14),
+                      padding: const EdgeInsets.only(
+                          right: 14, left: 14, bottom: 14),
                       child: ContinueButton(
                         name: "Next",
-                        callBack: () {
+                        callBack: () async{
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          _submit();
+                        await  Register().register(
+                              "${FirebaseAuth.instance.currentUser!.uid}",
+                              userNameController.text,
+                              "${FirebaseAuth.instance.currentUser!.email}",
+                              dobcontorller.text,
+                              gendercontroller.text,
+                              statecontroller.text,
+                              citycontroller.text,
+                              referCodeController.text,
+                              phoneController.text
+                              
+                              );
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => TabScreen(),));
                         },
                       ),
                     ),
@@ -344,7 +387,10 @@ class _RegisterViewState extends State<RegisterView> {
                   decoration: new BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: <BoxShadow>[
-                      BoxShadow(color: Colors.black45, offset: Offset(1.1, 1.1), blurRadius: 3.0),
+                      BoxShadow(
+                          color: Colors.black45,
+                          offset: Offset(1.1, 1.1),
+                          blurRadius: 3.0),
                     ],
                   ),
                   child: Column(
@@ -365,7 +411,8 @@ class _RegisterViewState extends State<RegisterView> {
                             child: CircleAvatar(
                               radius: 48,
                               child: _image == null
-                                  ? loginUserData.image == '' || loginUserData.image == null
+                                  ? loginUserData.image == '' ||
+                                          loginUserData.image == null
                                       ? Container(
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
@@ -377,17 +424,20 @@ class _RegisterViewState extends State<RegisterView> {
                                         )
                                       : new CachedNetworkImage(
                                           imageUrl: imageUrl,
-                                          placeholder: (context, url) => CircularProgressIndicator(
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(
                                             strokeWidth: 2.0,
                                           ),
-                                          errorWidget: (context, url, error) => new Icon(Icons.error),
+                                          errorWidget: (context, url, error) =>
+                                              new Icon(Icons.error),
                                           fit: BoxFit.cover,
                                         )
                                   : new Image.file(
                                       _image!,
                                       fit: BoxFit.cover,
                                     ),
-                              backgroundColor: AllCoustomTheme.getThemeData().primaryColor,
+                              backgroundColor:
+                                  AllCoustomTheme.getThemeData().primaryColor,
                             ),
                           ),
                         ),
@@ -403,15 +453,21 @@ class _RegisterViewState extends State<RegisterView> {
                       shape: BoxShape.circle,
                       color: Colors.transparent,
                       boxShadow: <BoxShadow>[
-                        BoxShadow(color: Colors.black54, offset: Offset(1.1, 1.1), blurRadius: 2.0),
+                        BoxShadow(
+                            color: Colors.black54,
+                            offset: Offset(1.1, 1.1),
+                            blurRadius: 2.0),
                       ],
                     ),
                     height: 20,
                     width: 20,
                     child: GestureDetector(
                       child: new CircleAvatar(
-                        backgroundColor: AllCoustomTheme.getThemeData().backgroundColor,
-                        child: Icon(Icons.edit, size: 14, color: AllCoustomTheme.getThemeData().primaryColor),
+                        backgroundColor:
+                            AllCoustomTheme.getThemeData().backgroundColor,
+                        child: Icon(Icons.edit,
+                            size: 14,
+                            color: AllCoustomTheme.getThemeData().primaryColor),
                       ),
                       onTap: () {},
                     ),
@@ -428,15 +484,4 @@ class _RegisterViewState extends State<RegisterView> {
   var genderList = ['male', 'female', 'other'];
   var selectedGender = 'male';
   var genderListIndex = 0;
-
-  void _submit() async {
-    FocusScope.of(context).requestFocus(FocusNode());
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TabScreen(),
-      ),
-    );
-  }
 }

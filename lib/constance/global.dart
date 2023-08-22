@@ -13,3 +13,4 @@ List<String> colors = ['#4FBE9F', '#32a852', '#e6230e', '#760ee6', '#db0ee6', '#
 int colorsIndex = 0;
 
 bool isHideTabBar = false;
+String phonenumber = '';
