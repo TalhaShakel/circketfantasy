@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use, unnecessary_null_comparison
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -376,7 +379,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                               borderRadius: new BorderRadius.circular(4.0),
                                               onTap: () {
                                                 FocusScope.of(context).requestFocus(new FocusNode());
-                                                _submit();
+                                                 _submit();
                                               },
                                               child: Center(
                                                 child: Text(
@@ -618,6 +621,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   void _submit() async {
+  //  var  auth = FirebaseAuth.instance.currentUser!.email;
     FocusScope.of(context).requestFocus(FocusNode());
 
     if (_formKey.currentState!.validate() == false) {
@@ -627,25 +631,23 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       showInSnackBar("Please!, Enter your valid birth date.");
       return;
     }
+// try {
+//    await FirebaseFirestore.instance.collection('UsersData').doc(auth).update({
+//       "Username": userNameController.text,
+//       "DateofBirth" : date.toString(),
+//       "Gender" : genderListIndex.toString(),
 
-    _formKey.currentState!.save();
-    loginUserData.name = userNameController.text;
-    loginUserData.dob = DateFormat('dd/MM/yyyy').format(date);
-    loginUserData.gender = genderList[genderListIndex];
-    loginUserData.email = emailController.text;
-    loginUserData.state = stateList[_selectedStateIndex].name;
-    loginUserData.city = cityList[_selectedCityIndex].name;
-    loginUserData.referral = referCodeController.text;
+//     });
+//     Navigator.pop(context);
+// }
+// catch(e){
+//   showInSnackBar( e.toString());
+// }
 
-    setState(() {
-      isLoginProsses = true;
-    });
+    
 
     Fluttertoast.showToast(msg: 'Succsessfull Update Profile');
-    Navigator.pop(context);
 
-    setState(() {
-      isLoginProsses = false;
-    });
+    
   }
 }

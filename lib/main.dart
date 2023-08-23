@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tempalteflutter/bloc/phoneVerificationBloc.dart';
-import 'package:tempalteflutter/constance/firsttime.dart';
 import 'package:tempalteflutter/constance/global.dart' as globals;
 import 'package:bloc/bloc.dart';
 import 'package:tempalteflutter/constance/routes.dart';
@@ -39,11 +38,11 @@ class SimpleBlocDelegate extends BlocObserver {
   }
 }
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
+  );
   Bloc.observer = SimpleBlocDelegate();
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
@@ -65,7 +64,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    globals.phoneVerificationBloc = PhoneVerificationBloc(PhoneVerificationBlocState.initial());
+    globals.phoneVerificationBloc =
+        PhoneVerificationBloc(PhoneVerificationBlocState.initial());
     globals.phoneVerificationBloc!.onInisialList("91", "phoneNoData");
     // FirstTime.getValues();
     super.initState();
@@ -93,7 +93,8 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: AllCoustomTheme.isLight ? Brightness.dark : Brightness.light,
+      statusBarBrightness:
+          AllCoustomTheme.isLight ? Brightness.dark : Brightness.light,
     ));
     return Container(
       color: AllCoustomTheme.getThemeData().primaryColor,
@@ -101,7 +102,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Cricket Fantasy',
         theme: AllCoustomTheme.getThemeData(),
-        routes: routes,
+        home: SplashScreen(),
       ),
     );
   }
@@ -115,6 +116,8 @@ class _MyAppState extends State<MyApp> {
     Routes.SPLASH: (BuildContext context) => new SplashScreen(),
     Routes.LOGIN: (BuildContext context) => new LoginScreen(),
     Routes.TAB: (BuildContext context) => new TabScreen(),
-    Routes.OTP: (BuildContext context) => new OtpValidationScreen(verificationId: '',),
+    Routes.OTP: (BuildContext context) => new OtpValidationScreen(
+          verificationId: '',
+        ),
   };
 }

@@ -1,14 +1,21 @@
-// ignore_for_file: unused_field, unnecessary_null_comparison, deprecated_member_use
+
+
+// ignore_for_file: unused_field
+
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tempalteflutter/api/apiProvider.dart';
 import 'package:tempalteflutter/api/logout.dart';
 import 'package:tempalteflutter/constance/constance.dart';
+import 'package:tempalteflutter/constance/routes.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/models/userData.dart';
@@ -16,7 +23,6 @@ import 'package:tempalteflutter/modules/home/homeScreen.dart';
 import 'package:tempalteflutter/modules/myProfile/transectionHistoryScreen.dart';
 import 'package:tempalteflutter/modules/myProfile/updateProfileScreen.dart';
 import 'package:tempalteflutter/modules/pymentOptions/withdrawScreen.dart';
-import 'package:tempalteflutter/modules/register/registerScreen.dart';
 import 'package:tempalteflutter/utils/avatarImage.dart';
 
 var responseData;
@@ -34,15 +40,10 @@ class _MyProfileScreenState extends State<MyProfileScreen>
   var imageUrl = '';
   ScrollController _scrollController = new ScrollController();
 
-  // var data;
+  
+  var auth = FirebaseAuth.instance.currentUser!;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Profilecontroller().getCurrentUserData();
-
-  // }
-
+  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -53,431 +54,454 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             color: AllCoustomTheme.getThemeData().primaryColor,
           ),
           SafeArea(
-            child: StreamBuilder(
-              initialData:(){
-                Center(child: CircularProgressIndicator(),);
-              } ,
+            child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection("UsersData")
-                    .doc(FirebaseAuth.instance.currentUser!.email)
-                    .get().asStream(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  var data = snapshot.data;
-                  return Scaffold(
-                    backgroundColor:
-                        AllCoustomTheme.getThemeData().backgroundColor,
-                    appBar: AppBar(
-                      elevation: 0,
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              height: 44,
-                              width: 44,
-                              child: AvatarImage(
-                                sizeValue: 44,
-                                radius: 44,
-                                isCircle: true,
-                                imageUrl:
-                                    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80",
+                    .collection('UsersData')
+                    .doc(auth.email)
+                    .snapshots(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
+                    final userdata =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    return Scaffold(
+                      backgroundColor:
+                          AllCoustomTheme.getThemeData().backgroundColor,
+                      appBar: AppBar(
+                        elevation: 0,
+                        title: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 44,
+                                width: 44,
+                                child:  AvatarImage(
+                                  sizeValue: 44,
+                                  radius: 44,
+                                  isCircle: true,
+                                  imageUrl: auth.displayName,
+                                      // "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80",
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                userdata["Username"],
+                                // data["Username"],
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                  color: AllCoustomTheme.getThemeData()
+                                      .backgroundColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        bottom: TabBar(
+                          tabs: [
+                            Tab(
+                              icon: Text(
+                                "My Detail",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              width: 8,
+                            Tab(
+                              icon: Text(
+                                "Matches",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
-                            Text(
-                              data["Username"],
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500,
-                                color: AllCoustomTheme.getThemeData()
-                                    .backgroundColor,
+                            Tab(
+                              icon: Text(
+                                "Wallet",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      bottom: TabBar(
-                        tabs: [
-                          Tab(
-                            icon: Text(
-                              "My Detail",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
+                      floatingActionButton: Padding(
+                        padding: const EdgeInsets.only(bottom: 50),
+                        child: FloatingActionButton(
+                          foregroundColor:
+                              AllCoustomTheme.getThemeData().backgroundColor,
+                          backgroundColor:
+                              AllCoustomTheme.getThemeData().primaryColor,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateProfileScreen(),
                               ),
-                            ),
-                          ),
-                          Tab(
-                            icon: Text(
-                              "Matches",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Tab(
-                            icon: Text(
-                              "Wallet",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
+                            );
+                          },
+                          child: Icon(Icons.edit),
+                        ),
                       ),
-                    ),
-                    floatingActionButton: Padding(
-                      padding: const EdgeInsets.only(bottom: 50),
-                      child: FloatingActionButton(
-                        foregroundColor:
-                            AllCoustomTheme.getThemeData().backgroundColor,
-                        backgroundColor:
-                            AllCoustomTheme.getThemeData().primaryColor,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterScreen(
-                                
+                      body: Container(
+                        color: AllCoustomTheme.getThemeData().backgroundColor,
+                        child: TabBarView(
+                          children: <Widget>[
+                            Container(
+                              child: SingleChildScrollView(
+                                padding: EdgeInsets.all(0),
+                                physics: BouncingScrollPhysics(),
+                                child: Container(
+                                    padding: EdgeInsets.only(top: 16),
+                                    child: snapshot.hasData
+                                        ? Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'Name',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata["Username"],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'Email',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      child: Text(
+                                                        userdata["Email"],
+                                                        style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE14,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'Mobile No',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata["PhoneNumber"],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'Date of Birth',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata['DateofBirth'],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'Gender',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata['Gender'],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'Country',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata['Country'],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'State',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata['State'],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 16,
+                                                    left: 16,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 100,
+                                                      child: Text(
+                                                        'City',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                          color: AllCoustomTheme
+                                                              .getTextThemeColors(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        userdata['City'],
+                                                        style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontSize:
+                                                              ConstanceData
+                                                                  .SIZE_TITLE16,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Divider(),
+                                              logoutButton(),
+                                            ],
+                                          )
+                                        : Center(
+                                            child: CircularProgressIndicator(),
+                                          )),
                               ),
                             ),
-                          );
-                        },
-                        child: Icon(Icons.edit),
+                            PlayingHistory(),
+                            Wallet(),
+                          ],
+                        ),
                       ),
-                    ),
-                    body: Container(
-                      color: AllCoustomTheme.getThemeData().backgroundColor,
-                      child: TabBarView(
-                        children: <Widget>[
-                          Container(
-                            child: SingleChildScrollView(
-                              padding: EdgeInsets.all(0),
-                              physics: BouncingScrollPhysics(),
-                              child: Container(
-                                padding: EdgeInsets.only(top: 16),
-                                
-                                child: snapshot.hasData ? Column(
-                                  children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'Name',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                                              data["Username"],
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'Email',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            child: Text(
-                                              data["Email"],
-                                              style: TextStyle(
-                                                overflow: TextOverflow.ellipsis,
-                                                                                    
-                                                                                    
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE14,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'Mobile No',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                                              data["PhoneNumber"],
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'Date of Birth',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                         data["DateofBirth"],
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'Gender',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                         data["Gender"],
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'Country',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                                                                       data["Country"],
-
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'State',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                                                                       data["State"],
-
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          right: 16,
-                                          left: 16,
-                                          top: 4,
-                                          bottom: 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 100,
-                                            child: Text(
-                                              'City',
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                                color: AllCoustomTheme
-                                                    .getTextThemeColors(),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            child: Text(
-                         data["City"],
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize:
-                                                    ConstanceData.SIZE_TITLE16,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    logoutButton(),
-                                  ],
-                                ) : Center(child: CircularProgressIndicator(),) 
-                              ), 
-                            ),
-                          ),
-                          PlayingHistory(),
-                          Wallet(),
-                        ],
-                      ),
-                    ),
-                  );
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator(),);
                 }),
           )
         ],
@@ -491,8 +515,9 @@ class _MyProfileScreenState extends State<MyProfileScreen>
       child: InkWell(
         onTap: () {
           print("tap");
-
-          Mycontroller().logout(context);
+  Mycontroller().logout(context);
+          // Navigator.of(context).pushNamedAndRemoveUntil(
+          //     Routes.LOGIN, (Route<dynamic> route) => false);
         },
         child: Padding(
           padding: EdgeInsets.only(left: 14, right: 14),
@@ -544,8 +569,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
               sizeValue: 44,
               radius: 44,
               isCircle: true,
-              imageUrl:
-                  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80",
+              imageUrl:auth.photoURL,
+                  // "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80",
             ),
           ),
           SizedBox(
@@ -916,7 +941,7 @@ class _AccountInfoScreenState extends State<AccountInfoScreen> {
       height: 30,
       child: InkWell(
         onTap: () {
-          LogOut().logout(context);
+          Mycontroller().logout(context);
         },
         child: Padding(
           padding: EdgeInsets.only(left: 14, right: 14),

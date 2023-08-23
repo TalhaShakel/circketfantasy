@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tempalteflutter/modules/home/tabScreen.dart';
 import 'package:tempalteflutter/modules/login/loginScreen.dart';
+import 'package:tempalteflutter/modules/register/registerScreen.dart';
 
 class Authpage extends StatelessWidget {
   const Authpage({super.key});

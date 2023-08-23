@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:tempalteflutter/api/api.dart';
 import 'package:tempalteflutter/api/apiProvider.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/sharedPreferences.dart';
@@ -34,29 +35,30 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    getTeamData(false);
+    Apiclass().fetchData();
+    // getTeamData(false);
     super.initState();
   }
 
-  Future<Null> getTeamData(bool pool) async {
-    userData = (await MySharedPreferences().getUserData())!;
-    if (!pool) {
-      setState(() {
-        isLoginProsses = true;
-      });
-    }
+  // Future<Null> getTeamData(bool pool) async {
+  //   userData = (await MySharedPreferences().getUserData())!;
+  //   if (!pool) {
+  //     setState(() {
+  //       isLoginProsses = true;
+  //     });
+  //   }
 
-    var responseData = await ApiProvider().postScheduleList();
+  //   var responseData = await ApiProvider().postScheduleList();
 
-    if (responseData != null && responseData.shedualData != null) {
-      sheduallist = responseData.shedualData!;
-    }
-    if (!mounted) return null;
-    setState(() {
-      isLoginProsses = false;
-    });
-    return null;
-  }
+  //   if (responseData != null && responseData.shedualData != null) {
+  //     sheduallist = responseData.shedualData!;
+  //   }
+  //   if (!mounted) return null;
+  //   setState(() {
+  //     isLoginProsses = false;
+  //   });
+  //   return null;
+  // }
 
   @override
   void dispose() {
@@ -98,7 +100,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               displacement: 100,
               key: _refreshIndicatorKey,
               onRefresh: () async {
-                await getTeamData(true);
+                await Apiclass().fetchData();
+                // await getTeamData(true);
               },
               child: ModalProgressHUD(
                 inAsyncCall: isLoginProsses,

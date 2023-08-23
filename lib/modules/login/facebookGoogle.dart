@@ -5,7 +5,9 @@ import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tempalteflutter/controller/controller.dart';
+import 'package:tempalteflutter/modules/home/tabScreen.dart';
 import 'package:tempalteflutter/modules/phoneauth/PhoneValidationScreen.dart';
+import 'package:tempalteflutter/modules/register/registerScreen.dart';
 import 'package:tempalteflutter/validator/validator.dart';
 
 class FacebookGoogleView extends StatefulWidget {
@@ -47,10 +49,11 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                     child: InkWell(
                       borderRadius: new BorderRadius.circular(8.0),
                       onTap: () {
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => 
-                        PhoneValidationScreen(
-                          
-                        ),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PhoneValidationScreen(),
+                            ));
                       },
                       child: Padding(
                         padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -72,7 +75,8 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: ConstanceData.SIZE_TITLE14,
-                                  color: AllCoustomTheme.getThemeData().backgroundColor,
+                                  color: AllCoustomTheme.getThemeData()
+                                      .backgroundColor,
                                 ),
                               ),
                             ],
@@ -95,7 +99,12 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                     child: InkWell(
                       borderRadius: new BorderRadius.circular(8.0),
                       onTap: () async {
-                       Mycontroller().handleGoogleLogin(context);
+                        await Mycontroller().handleGoogleLogin(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterScreen(),
+                            ));
                       },
                       child: Padding(
                         padding: EdgeInsets.only(top: 12, bottom: 12),
@@ -106,7 +115,8 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                               Icon(
                                 FontAwesomeIcons.googlePlusG,
                                 size: 18,
-                                color: AllCoustomTheme.getThemeData().backgroundColor,
+                                color: AllCoustomTheme.getThemeData()
+                                    .backgroundColor,
                               ),
                               SizedBox(
                                 width: 8,
@@ -117,7 +127,8 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: ConstanceData.SIZE_TITLE14,
-                                  color: AllCoustomTheme.getThemeData().backgroundColor,
+                                  color: AllCoustomTheme.getThemeData()
+                                      .backgroundColor,
                                 ),
                               ),
                             ],
@@ -137,7 +148,6 @@ class _FacebookGoogleViewState extends State<FacebookGoogleView> {
       ),
     );
   }
-
 }
 
 // Future<void> _handleSignIn(context) async {

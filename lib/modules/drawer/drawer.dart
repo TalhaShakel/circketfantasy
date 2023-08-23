@@ -1,28 +1,36 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tempalteflutter/api/logout.dart';
 import 'package:tempalteflutter/constance/constance.dart';
+import 'package:tempalteflutter/constance/routes.dart';
+import 'package:tempalteflutter/constance/sharedPreferences.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/main.dart';
 import 'package:tempalteflutter/modules/color/setColor.dart';
+import 'package:tempalteflutter/modules/login/loginScreen.dart';
 import 'package:tempalteflutter/modules/notification/notificationScreen.dart';
 import 'package:tempalteflutter/modules/pymentOptions/pymentOptionsScreen.dart';
 import 'package:tempalteflutter/utils/avatarImage.dart';
 import 'package:tempalteflutter/constance/global.dart' as globals;
+import 'package:tempalteflutter/utils/dialogs.dart';
 
 class AppDrawer extends StatefulWidget {
   final VoidCallback? mySettingClick;
   final VoidCallback? referralClick;
 
-  const AppDrawer({Key? key, this.mySettingClick, this.referralClick}) : super(key: key);
+  const AppDrawer({Key? key, this.mySettingClick, this.referralClick})
+      : super(key: key);
   @override
   _AppDrawerState createState() => _AppDrawerState();
 }
 
 class _AppDrawerState extends State<AppDrawer> {
+  var auth = FirebaseAuth.instance.currentUser!.displayName;
   var appVerison = '1.1.1';
   bool isLoginProsses = false;
 
@@ -122,8 +130,10 @@ class _AppDrawerState extends State<AppDrawer> {
                         Row(
                           children: <Widget>[
                             new Text(
-                              'Enric',
+                              auth!,
                               style: TextStyle(
+                                
+                                overflow: TextOverflow.ellipsis,
                                 fontFamily: 'Poppins',
                                 fontSize: ConstanceData.SIZE_TITLE22,
                                 color: Colors.white,
@@ -137,14 +147,18 @@ class _AppDrawerState extends State<AppDrawer> {
                             Icon(
                               Icons.location_on,
                               size: 10,
-                              color: AllCoustomTheme.getThemeData().backgroundColor.withOpacity(0.5),
+                              color: AllCoustomTheme.getThemeData()
+                                  .backgroundColor
+                                  .withOpacity(0.5),
                             ),
                             new Text(
-                              ' ' + 'Texas',
+                              "Karachi",
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: ConstanceData.SIZE_TITLE14,
-                                color: AllCoustomTheme.getThemeData().backgroundColor.withOpacity(0.5),
+                                color: AllCoustomTheme.getThemeData()
+                                    .backgroundColor
+                                    .withOpacity(0.5),
                               ),
                             ),
                           ],
@@ -163,7 +177,8 @@ class _AppDrawerState extends State<AppDrawer> {
                     height: 50.0,
                     child: AvatarImage(
                       isCircle: true,
-                      imageUrl: 'https://www.menshairstylesnow.com/wp-content/uploads/2018/03/Hairstyles-for-Square-Faces-Slicked-Back-Undercut.jpg',
+                      imageUrl:
+                          'https://www.menshairstylesnow.com/wp-content/uploads/2018/03/Hairstyles-for-Square-Faces-Slicked-Back-Undercut.jpg',
                       radius: 50,
                       sizeValue: 50,
                     ),
@@ -273,7 +288,8 @@ class _AppDrawerState extends State<AppDrawer> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                    padding:
+                        EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
                     decoration: new BoxDecoration(
                       color: AllCoustomTheme.getThemeData().backgroundColor,
                       borderRadius: new BorderRadius.circular(4.0),
@@ -282,7 +298,10 @@ class _AppDrawerState extends State<AppDrawer> {
                         width: 1,
                       ),
                       boxShadow: <BoxShadow>[
-                        BoxShadow(color: Colors.black.withOpacity(0.2), offset: Offset(0, 1), blurRadius: 5.0),
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: Offset(0, 1),
+                            blurRadius: 5.0),
                       ],
                     ),
                     child: Center(
@@ -390,7 +409,8 @@ class _AppDrawerState extends State<AppDrawer> {
                         radius: 32,
                         child: Text(
                           'Light',
-                          style: TextStyle(fontFamily: 'Poppins', color: Colors.black),
+                          style: TextStyle(
+                              fontFamily: 'Poppins', color: Colors.black),
                         ),
                       ),
                     ),
@@ -403,13 +423,15 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                     child: CircleAvatar(
                       radius: 34,
-                      backgroundColor: Theme.of(context).textTheme.headline6!.color,
+                      backgroundColor:
+                          Theme.of(context).textTheme.headline6!.color,
                       child: CircleAvatar(
                         backgroundColor: Colors.black,
                         radius: 32,
                         child: Text(
                           'Dark',
-                          style: TextStyle(fontFamily: 'Poppins', color: Colors.white),
+                          style: TextStyle(
+                              fontFamily: 'Poppins', color: Colors.white),
                         ),
                       ),
                     ),
@@ -644,9 +666,9 @@ class _AppDrawerState extends State<AppDrawer> {
     return Container(
       height: 54,
       child: InkWell(
-        onTap: ()async {
+        onTap: () async {
           print("tap");
-        await  Mycontroller().logout(context);
+          Mycontroller().logout(context);
         },
         child: Padding(
           padding: EdgeInsets.only(left: 14, right: 14),

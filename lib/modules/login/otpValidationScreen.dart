@@ -9,6 +9,7 @@ import 'package:tempalteflutter/modules/home/homeScreen.dart';
 import 'package:tempalteflutter/modules/login/continuebutton.dart';
 import 'package:tempalteflutter/modules/login/otpProgressView.dart';
 import 'package:tempalteflutter/modules/login/otpTimer.dart';
+import 'package:tempalteflutter/modules/register/registerScreen.dart';
 
 class OtpValidationScreen extends StatefulWidget {
   const OtpValidationScreen({super.key, required this.verificationId});
@@ -41,7 +42,7 @@ try{
         .then((value) => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomeScreen(),
+              builder: (context) => RegisterScreen(),
             )));
 }catch(e){
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));

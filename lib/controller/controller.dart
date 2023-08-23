@@ -1,17 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tempalteflutter/constance/routes.dart';
+import 'package:tempalteflutter/api/logout.dart';
 import 'package:tempalteflutter/modules/login/otpValidationScreen.dart';
-import 'package:tempalteflutter/modules/register/registerScreen.dart';
-import 'package:tempalteflutter/modules/register/registerView.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
-import '../utils/dialogs.dart';
-
 class Mycontroller {
+  var auth  = FirebaseAuth.instance;
   handleGoogleLogin(context) async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -19,31 +13,36 @@ class Mycontroller {
 
     final credential = GoogleAuthProvider.credential(
         accessToken: gauth.accessToken, idToken: gauth.idToken);
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential
+          );
+           
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    await FirebaseFirestore.instance
-        .collection('UsersData')
-        .doc(googleUser.email)
-        .set({
-      "Username": googleUser.displayName,
-      "Email": googleUser.email,
-      "DateofBirth": "",
-      "Gender": "-",
-      "State": "-",
-      "City": "-",
-      "ReferCode": "-",
-      "PhoneNumber": "-",
-      "Country": "-"
-    });
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => RegisterScreen(),
-    ));
+      
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 
   loginwithphonenumber(String phonenumebr, context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       verificationCompleted: (PhoneAuthCredential credential) async {
         await FirebaseAuth.instance.signInWithCredential(credential);
+        await FirebaseFirestore.instance
+            .collection('UsersData')
+            .doc(credential.accessToken)
+            .set({
+          "Username": '-',
+          "Email": '-',
+          "DateofBirth": "-",
+          "Gender": "-",
+          "State": "-",
+          "City": "-",
+          "ReferCode": "-",
+          "PhoneNumber": phonenumebr,
+          "Country": "-"
+        });
       },
       // timeout: const Duration(seconds: 60),
       verificationFailed: (FirebaseAuthException e) {
@@ -70,20 +69,14 @@ class Mycontroller {
 
   logout(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.LOGIN, (Route<dynamic> route) => false);
-      print("succeed but routes error ");
-    } on Exception {
-      Dialogs.showDialogWithOneButton(
-        context,
-        "Error",
-        "please! try again.",
-        onButtonPress: () {
-          return null;
-        },
-      );
+      await GoogleSignIn().signOut();
+      LogOut().logout(context);
+
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
+    
   }
 
   Future<void> phoneSignIn(

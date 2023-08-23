@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '266029916715',
     projectId: 'crickk-5e28e',
     storageBucket: 'crickk-5e28e.appspot.com',
+    androidClientId: '266029916715-2ai9fkme5msufeg6s99n1pc6p2g875hr.apps.googleusercontent.com',
     iosClientId: '266029916715-uiukl4mi4m84qrve1qfa10lcldhj1vv7.apps.googleusercontent.com',
     iosBundleId: 'com.crick11',
   );

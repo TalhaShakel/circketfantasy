@@ -9,11 +9,11 @@ import 'package:tempalteflutter/modules/login/loginScreen.dart';
 import 'package:tempalteflutter/utils/dialogs.dart';
 
 class LogOut {
+  
   void logout(BuildContext context) async {
     try {
-      globals.usertoken = '';
-      await MySharedPreferences().clearSharedPreferences();
-      Navigator.of(context).pushNamedAndRemoveUntil(Routes.LOGIN, (Route<dynamic> route) => false);
+    
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginScreen(),), (route) => false);
     } on Exception {
       Dialogs.showDialogWithOneButton(
         context,
@@ -29,7 +29,7 @@ class LogOut {
       globals.usertoken = '';
       loginUserData = UserData();
       await MySharedPreferences().clearSharedPreferences();
-      Navigator.of(context).pushNamedAndRemoveUntil(Routes.LOGIN, (Route<dynamic> route) => false);
+      Navigator.of(context).pushNamed(Routes.LOGIN,);
     } on Exception {
       Dialogs.showDialogWithOneButton(
         context,
