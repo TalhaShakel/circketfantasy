@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "767008257140",
-    "project_id": "crick-f4946",
-    "storage_bucket": "crick-f4946.appspot.com"
+    "project_number": "821276242271",
+    "project_id": "cricket-715fc",
+    "storage_bucket": "cricket-715fc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:767008257140:android:3bfbd2f69de8bf666b8d21",
+        "mobilesdk_app_id": "1:821276242271:android:de45ea17e452c77975c6ea",
         "android_client_info": {
           "package_name": "com.crick11"
         }
       },
       "oauth_client": [
         {
-          "client_id": "767008257140-fi4luuhh3k3bd4ucu3kasda2j30fedt1.apps.googleusercontent.com",
+          "client_id": "821276242271-r8jo23dgo4uo35o6bag065ba98uvp9to.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBy-EKzfkZsTM9W4_a_NIG88KQMiRBzmr0"
+          "current_key": "AIzaSyD143jtACS877jped6f3cv01NKoQGsY2Bg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "767008257140-fi4luuhh3k3bd4ucu3kasda2j30fedt1.apps.googleusercontent.com",
+              "client_id": "821276242271-hdg0o6oquc1qqr0jol50ll5ta624m0e9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

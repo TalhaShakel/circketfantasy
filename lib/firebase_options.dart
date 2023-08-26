@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBy-EKzfkZsTM9W4_a_NIG88KQMiRBzmr0',
-    appId: '1:767008257140:android:3bfbd2f69de8bf666b8d21',
-    messagingSenderId: '767008257140',
-    projectId: 'crick-f4946',
-    storageBucket: 'crick-f4946.appspot.com',
+    apiKey: 'AIzaSyD143jtACS877jped6f3cv01NKoQGsY2Bg',
+    appId: '1:821276242271:android:de45ea17e452c77975c6ea',
+    messagingSenderId: '821276242271',
+    projectId: 'cricket-715fc',
+    storageBucket: 'cricket-715fc.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA7V-5yM8DrsIUih4TLPDvmWxrckTij_WM',
-    appId: '1:767008257140:ios:7712d7edeed7d5246b8d21',
-    messagingSenderId: '767008257140',
-    projectId: 'crick-f4946',
-    storageBucket: 'crick-f4946.appspot.com',
-    iosClientId: '767008257140-jehf7kg79629jatg6eii62d927bq0eih.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC_afT1_0CKI_3bM2yMdrQDP-Lv4R7Y3mY',
+    appId: '1:821276242271:ios:6ab0c8b2c315c79075c6ea',
+    messagingSenderId: '821276242271',
+    projectId: 'cricket-715fc',
+    storageBucket: 'cricket-715fc.appspot.com',
+    iosClientId: '821276242271-rphsc5so9029gka4lbtlkfek6vo9igqf.apps.googleusercontent.com',
     iosBundleId: 'com.crick11',
   );
 }
