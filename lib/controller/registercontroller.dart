@@ -33,7 +33,7 @@ class registercontroller {
           "City": citycontroller,
           "ReferCode": referCodeController,
           "uid": auth.uid,
-          // "image": downloadUrl,
+          "image": downloadUrl,
         });
 
         return downloadUrl;

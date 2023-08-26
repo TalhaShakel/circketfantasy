@@ -5,6 +5,7 @@ import 'package:tempalteflutter/constance/global.dart' as globals;
 import 'package:bloc/bloc.dart';
 import 'package:tempalteflutter/constance/routes.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/modules/home/homeScreen.dart';
 import 'package:tempalteflutter/modules/home/tabScreen.dart';
 import 'package:tempalteflutter/modules/login/loginScreen.dart';
 import 'package:tempalteflutter/modules/login/otpValidationScreen.dart';

@@ -5,8 +5,10 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tempalteflutter/api/api.dart';
 import 'package:tempalteflutter/api/apiProvider.dart';
 import 'package:tempalteflutter/constance/constance.dart';
+import 'package:tempalteflutter/constance/global.dart';
 import 'package:tempalteflutter/constance/sharedPreferences.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/models/mymatchmodel.dart';
 import 'package:tempalteflutter/models/scheduleResponseData.dart';
 import 'package:tempalteflutter/modules/contests/contestsScreen.dart';
 import 'package:tempalteflutter/models/userData.dart';
@@ -23,10 +25,12 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _controller;
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   var sheduallist = <ShedualData>[];
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -35,30 +39,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    Apiclass().fetchData();
-    // getTeamData(false);
+
     super.initState();
   }
 
-  // Future<Null> getTeamData(bool pool) async {
-  //   userData = (await MySharedPreferences().getUserData())!;
-  //   if (!pool) {
-  //     setState(() {
-  //       isLoginProsses = true;
-  //     });
-  //   }
-
-  //   var responseData = await ApiProvider().postScheduleList();
-
-  //   if (responseData != null && responseData.shedualData != null) {
-  //     sheduallist = responseData.shedualData!;
-  //   }
-  //   if (!mounted) return null;
-  //   setState(() {
-  //     isLoginProsses = false;
-  //   });
-  //   return null;
-  // }
+  
 
   @override
   void dispose() {
@@ -96,38 +81,39 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
             key: _scaffoldKey,
             backgroundColor: AllCoustomTheme.getThemeData().backgroundColor,
-            body: RefreshIndicator(
-              displacement: 100,
-              key: _refreshIndicatorKey,
-              onRefresh: () async {
-                await Apiclass().fetchData();
-                // await getTeamData(true);
+   
+
+            body:  RefreshIndicator(
+              onRefresh:() async{
+                setState(() {
+                  
+                });
               },
-              child: ModalProgressHUD(
-                inAsyncCall: isLoginProsses,
-                color: Colors.transparent,
-                progressIndicator: CircularProgressIndicator(
-                  strokeWidth: 2.0,
-                ),
-                child: Stack(
-                  children: <Widget>[
-                    CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: <Widget>[
-                        SliverList(
-                          delegate: new SliverChildBuilderDelegate(
-                            (context, index) => listItems(),
-                            childCount: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              child: FutureBuilder<MatchModel>(
+                    future: Apiclass().fetchData(), // Call your fetchData function
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator()); // Show a loading indicator while waiting
+                      } else if (snapshot.hasError) {
+              return Center(child: Text('OOPs!: ${snapshot.error}'));
+                      } else if (!snapshot.hasData) {
+              return Center(child: Text('No data available'));
+                      } else {
+              // Display the data on the screen
+              return ListView.builder(
+                itemCount: snapshot.data!.data!.length,
+                itemBuilder: (context, index) {
+                  final match = snapshot.data!.data![index];
+                  return listItems(match.venu!.trimRight(), match.team1, match.team2, match.team1img, match.team2img, match.time,match.venu,match.series);
+                },
+              );
+                      }
+                    },
+                  ),
+            ),
             ),
           ),
-        ),
+        
       ],
     );
   }
@@ -138,10 +124,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       child: Row(
         children: <Widget>[
           CircleAvatar(
-            backgroundColor: AllCoustomTheme.getThemeData().scaffoldBackgroundColor,
+            backgroundColor:
+                AllCoustomTheme.getThemeData().scaffoldBackgroundColor,
             radius: 16,
             child: AvatarImage(
-              imageUrl: 'https://www.menshairstylesnow.com/wp-content/uploads/2018/03/Hairstyles-for-Square-Faces-Slicked-Back-Undercut.jpg',
+              imageUrl:
+                  'https://www.menshairstylesnow.com/wp-content/uploads/2018/03/Hairstyles-for-Square-Faces-Slicked-Back-Undercut.jpg',
               isCircle: true,
               radius: 28,
               sizeValue: 28,
@@ -220,67 +208,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Widget listItems() {
-    return Column(
-      children: <Widget>[
-        MatchesList(
-          titel: "BYJU's jharkhand T20",
-          country1Name: "South Africa",
-          country2Name: "India",
-          country1Flag: 'assets/19.png',
-          country2Flag: 'assets/25.png',
-          price: "₹2 Lakhs",
-          time: '10m 13s',
-        ),
-        MatchesList(
-          titel: 'Fancode ECS T10-Sweden',
-          country1Name: "Sri Lnka",
-          country2Name: "Bangladesh",
-          country1Flag: 'assets/21.png',
-          country2Flag: 'assets/23.png',
-          price: "₹1 Lakhs",
-          time: '18m 21s',
-        ),
-        MatchesList(
-          titel: 'ICC Cricket World Cup',
-          country1Name: "Pakistan",
-          country2Name: "West Indies",
-          country1Flag: 'assets/13.png',
-          country2Flag: 'assets/17.png',
-          price: "₹2 Lakhs",
-          time: 'Fri, 13 Aug',
-        ),
-        MatchesList(
-          titel: 'English One-Day Cup',
-          country1Name: "South Africa",
-          country2Name: "India",
-          country1Flag: 'assets/19.png',
-          country2Flag: 'assets/25.png',
-          price: "₹50000",
-          time: 'Mon, 9 Sep',
-        ),
-        MatchesList(
-          titel: 'Fancode ECS T10-Sweden',
-          country1Name: "Sri Lnka",
-          country2Name: "Bangladesh",
-          country1Flag: 'assets/21.png',
-          country2Flag: 'assets/23.png',
-          price: "₹1 Lakhs",
-          time: '18m 21s',
-        ),
-        MatchesList(
-          titel: 'ICC Cricket World Cup',
-          country1Name: "Pakistan",
-          country2Name: "West Indies",
-          country1Flag: 'assets/13.png',
-          country2Flag: 'assets/17.png',
-          price: "₹2 Lakhs",
-          time: 'Fri, 13 Aug',
-        ),
-        // SizedBox(
-        //   height: 70,
-        // )
-      ],
+  Widget listItems(title, t1, t2, tt1, tt2, time,venu,series) {
+    return MatchesList(
+      titel: title,
+      country1Name: t1,
+      country2Name: t2,
+      country1Flag: tt1,
+      country2Flag: tt2,
+      price: "₹2 Lakhs",
+      time: time,
+      venu: venu,
+      series: series,
     );
   }
 
@@ -297,6 +235,8 @@ class MatchesList extends StatefulWidget {
   final String? country2Flag;
   final String? time;
   final String? price;
+  final String? venu;
+  final String? series;
 
   const MatchesList({
     Key? key,
@@ -305,6 +245,8 @@ class MatchesList extends StatefulWidget {
     this.country2Name,
     this.time,
     this.price,
+    this.venu,
+    this.series,
     this.country1Flag,
     this.country2Flag,
   }) : super(key: key);
@@ -344,9 +286,10 @@ class _MatchesListState extends State<MatchesList> {
             country2Flag: widget.country2Flag!,
             country1Name: widget.country1Name!,
             country2Name: widget.country2Name!,
-            price: widget.price!,
             time: widget.time!,
             titel: widget.titel!,
+            series: widget.series!,
+            venu: widget.venu!,
           ),
         );
       },
@@ -364,14 +307,18 @@ class _MatchesListState extends State<MatchesList> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        widget.titel!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE12,
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).disabledColor,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width/1.5,
+                        child: Text(
+                          widget.titel!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'Poppins',
+                            fontSize: ConstanceData.SIZE_TITLE12,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).disabledColor,
+                          ),
                         ),
                       ),
                       Expanded(child: SizedBox()),
@@ -420,10 +367,9 @@ class _MatchesListState extends State<MatchesList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset(widget.country1Flag!),
+                      CircleAvatar(
+                       
+                        backgroundImage: NetworkImage(widget.country1Flag!,),
                       ),
                       Container(
                         child: Text(
@@ -435,10 +381,9 @@ class _MatchesListState extends State<MatchesList> {
                           ),
                         ),
                       ),
-                      Container(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset(widget.country2Flag!),
+                      CircleAvatar(
+                       
+                        backgroundImage: NetworkImage(widget.country2Flag!,),
                       ),
                     ],
                   ),
@@ -447,7 +392,9 @@ class _MatchesListState extends State<MatchesList> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: AllCoustomTheme.isLight ? HexColor("#f5f5f5") : Theme.of(context).disabledColor.withOpacity(0.1),
+                color: AllCoustomTheme.isLight
+                    ? HexColor("#f5f5f5")
+                    : Theme.of(context).disabledColor.withOpacity(0.1),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
@@ -501,6 +448,7 @@ class _MatchesListState extends State<MatchesList> {
   }
 }
 
+
 class UnderGroundDrawer extends StatefulWidget {
   final String? titel;
   final String? country1Name;
@@ -508,7 +456,8 @@ class UnderGroundDrawer extends StatefulWidget {
   final String? country2Name;
   final String? country2Flag;
   final String? time;
-  final String? price;
+  final String? venu;
+  final String? series;
 
   const UnderGroundDrawer({
     Key? key,
@@ -518,7 +467,9 @@ class UnderGroundDrawer extends StatefulWidget {
     this.country2Name,
     this.country2Flag,
     this.time,
-    this.price,
+    this.venu,
+    this.series,
+   
   }) : super(key: key);
 
   @override
@@ -526,8 +477,11 @@ class UnderGroundDrawer extends StatefulWidget {
 }
 
 class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
+  
+
   @override
   Widget build(BuildContext context) {
+  
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -555,7 +509,8 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(right: 16, left: 16, top: 10, bottom: 6),
+                padding:
+                    EdgeInsets.only(right: 16, left: 16, top: 10, bottom: 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -590,7 +545,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
               ),
               Divider(),
               Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
+                padding: EdgeInsets.only(right: 10, left: 16, bottom: 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -612,7 +567,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
                     ),
                     Flexible(
                       child: Text(
-                        widget.titel!,
+                      widget.series!,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: ConstanceData.SIZE_TITLE16,
@@ -626,7 +581,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
               ),
               Divider(),
               Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
+                padding: EdgeInsets.only(right: 10, left: 16, bottom: 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -661,7 +616,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
               ),
               Divider(),
               Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
+                padding: EdgeInsets.only(right: 10, left: 16, bottom: 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -683,7 +638,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
                     ),
                     Flexible(
                       child: Text(
-                        '15:00:00',
+                        widget.time!,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: ConstanceData.SIZE_TITLE16,
@@ -696,7 +651,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
               ),
               Divider(),
               Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
+                padding: EdgeInsets.only(right: 10, left: 16, bottom: 6),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -718,8 +673,10 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
                     ),
                     Flexible(
                       child: Text(
-                        'India',
+                        
+                        widget.venu!,
                         style: TextStyle(
+
                           fontFamily: 'Poppins',
                           fontSize: ConstanceData.SIZE_TITLE16,
                           color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
@@ -730,146 +687,7 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
                 ),
               ),
               Divider(),
-              Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 100,
-                      child: Text(
-                        'Umpires',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getTextThemeColors(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Flexible(
-                      child: Text(
-                        'Martine',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(),
-              Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 100,
-                      child: Text(
-                        'Referee',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getTextThemeColors(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Flexible(
-                      child: Text(
-                        'Charls piter',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(),
-              Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 100,
-                      child: Text(
-                        'Match Format',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getTextThemeColors(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Flexible(
-                      child: Text(
-                        'Match Formate',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(),
-              Container(
-                padding: EdgeInsets.only(right: 16, left: 16, bottom: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: 100,
-                      child: Text(
-                        'Location',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getTextThemeColors(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Flexible(
-                      child: Text(
-                        'India',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider()
+             
             ],
           ),
         );
@@ -890,19 +708,21 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
               Container(
                 width: 30,
                 height: 30,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  child: Image.asset(widget.country1Flag!),
-                ),
+                child:   CircleAvatar(
+
+                
+                backgroundImage: NetworkImage(widget.country1Flag!),
+              ),
               ),
             ],
           ),
           Container(
+            width: MediaQuery.of(context).size.width/3,
             padding: EdgeInsets.only(left: 4),
             child: new Text(
               widget.country1Name!,
               style: TextStyle(
+                overflow: TextOverflow.ellipsis,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.bold,
                 color: AllCoustomTheme.getThemeData().primaryColor,
@@ -927,8 +747,11 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
             width: 10,
           ),
           Container(
+                        width: MediaQuery.of(context).size.width/3.2,
+
             child: new Text(
               widget.country2Name!,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',
@@ -940,27 +763,14 @@ class _UnderGroundDrawerState extends State<UnderGroundDrawer> {
           Container(
             padding: EdgeInsets.only(left: 4),
             child: Container(
-              child: Container(
-                width: 50,
-                height: 50,
-                child: Image.asset(widget.country2Flag!),
+              child: CircleAvatar(
+
+                
+                backgroundImage: NetworkImage(widget.country2Flag!),
               ),
             ),
           ),
-          Expanded(
-            child: Container(),
-          ),
-          Text(
-            widget.time!,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: HexColor(
-                '#AAAFBC',
-              ),
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-            ),
-          ),
+          // 
         ],
       ),
     );

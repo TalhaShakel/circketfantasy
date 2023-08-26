@@ -51,10 +51,9 @@ class AvatarImage extends StatelessWidget {
                       ),
                     )
                   : isAssets!
-                      ? Image.asset(imageUrl!)
+                      ? Image.network(imageUrl!)
                       : new CachedNetworkImage(
-                          imageUrl:
-                              "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80",
+                          imageUrl: imageUrl!,
                           placeholder: (context, url) => Center(
                             child: Container(
                               padding: EdgeInsets.all(sizeValue! * 0.3),

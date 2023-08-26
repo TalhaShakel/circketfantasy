@@ -1,23 +1,21 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tempalteflutter/api/logout.dart';
 import 'package:tempalteflutter/constance/constance.dart';
-import 'package:tempalteflutter/constance/routes.dart';
-import 'package:tempalteflutter/constance/sharedPreferences.dart';
+
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/main.dart';
 import 'package:tempalteflutter/modules/color/setColor.dart';
-import 'package:tempalteflutter/modules/login/loginScreen.dart';
 import 'package:tempalteflutter/modules/notification/notificationScreen.dart';
 import 'package:tempalteflutter/modules/pymentOptions/pymentOptionsScreen.dart';
 import 'package:tempalteflutter/utils/avatarImage.dart';
 import 'package:tempalteflutter/constance/global.dart' as globals;
-import 'package:tempalteflutter/utils/dialogs.dart';
 
 class AppDrawer extends StatefulWidget {
   final VoidCallback? mySettingClick;
@@ -36,8 +34,10 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      elevation: 0,
+    return Container(
+      // height: 200,
+      width: 300,
+      color: Colors.white,
       child: Column(
         children: <Widget>[
           Container(
@@ -47,7 +47,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 SizedBox(
                   height: MediaQuery.of(context).padding.top,
                 ),
-                userDetail(),
+                userDetail(" $auth", "K-Town"),
               ],
             ),
           ),
@@ -98,9 +98,10 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  Widget userDetail() {
+  Widget userDetail(String name, String city) {
     return Container(
       height: 100,
+      width: 600,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -117,30 +118,30 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
             ),
           ),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: Column(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            new Text(
-                              auth!,
-                              style: TextStyle(
-                                
-                                overflow: TextOverflow.ellipsis,
-                                fontFamily: 'Poppins',
-                                fontSize: ConstanceData.SIZE_TITLE22,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        SizedBox(
+                          child: Text(
+                            name,
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontFamily: 'Poppins',
+                              fontSize: ConstanceData.SIZE_TITLE18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
                             ),
-                          ],
+                          ),
                         ),
                         Row(
                           children: <Widget>[
@@ -152,7 +153,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                   .withOpacity(0.5),
                             ),
                             new Text(
-                              "Karachi",
+                              city,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: ConstanceData.SIZE_TITLE14,
@@ -164,23 +165,6 @@ class _AppDrawerState extends State<AppDrawer> {
                           ],
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Container(
-                    width: 50.0,
-                    height: 50.0,
-                    child: AvatarImage(
-                      isCircle: true,
-                      imageUrl:
-                          'https://www.menshairstylesnow.com/wp-content/uploads/2018/03/Hairstyles-for-Square-Faces-Slicked-Back-Undercut.jpg',
-                      radius: 50,
-                      sizeValue: 50,
                     ),
                   ),
                 ),

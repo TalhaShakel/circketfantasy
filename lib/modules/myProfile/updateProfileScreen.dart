@@ -38,7 +38,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   var userNameController = new TextEditingController();
   var emailController = new TextEditingController();
   var referCodeController = new TextEditingController();
-  var phoneController = new TextEditingController();
+  var Gendercontroller= new TextEditingController();
+  var dobcontroller= new TextEditingController();
 
   var userNameFocusNode = FocusNode();
   var emailFocusNode = FocusNode();
@@ -95,7 +96,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     userNameController.dispose();
     emailController.dispose();
     referCodeController.dispose();
-    phoneController.dispose();
+    Gendercontroller.dispose();
     super.dispose();
   }
 
@@ -278,7 +279,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                             color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
                                           ),
                                           autofocus: false,
-                                          focusNode: userNameFocusNode,
+                                          // focusNode: userNameFocusNode,
                                           keyboardType: TextInputType.emailAddress,
                                           decoration: new InputDecoration(
                                             labelText: 'Name',
@@ -328,17 +329,74 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       SizedBox(
                                         height: 8,
                                       ),
-                                      _buildDatePicker(context),
+                                      new Container(
+                                        padding: const EdgeInsets.only(top: 16),
+                                        child: new TextFormField(
+                                          controller: dobcontroller,
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: ConstanceData.SIZE_TITLE16,
+                                            color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                          ),
+                                          autofocus: false,
+                                          keyboardType: TextInputType.emailAddress,
+                                          decoration: new InputDecoration(
+                                            labelText: 'Date of birth',
+                                            icon: Padding(
+                                              padding: const EdgeInsets.only(top: 16),
+                                            ),
+                                          ),
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).requestFocus(emailFocusNode);
+                                          },
+                                          validator: _validateUserName,
+                                          onSaved: (value) {
+                                            loginUserData.name = value;
+                                          },
+                                        ),
+                                      ),
                                       SizedBox(
                                         height: 8,
                                       ),
-                                      _buildGenderPickerDemo(context),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                       new Container(
+                                        padding: const EdgeInsets.only(top: 16),
+                                        child: new TextFormField(
+                                          controller: Gendercontroller,
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: ConstanceData.SIZE_TITLE16,
+                                            color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                                          ),
+                                          autofocus: false,
+                                          focusNode: userNameFocusNode,
+                                          keyboardType: TextInputType.emailAddress,
+                                          decoration: new InputDecoration(
+                                            labelText: 'Gender',
+                                            icon: Padding(
+                                              padding: const EdgeInsets.only(top: 16),
+                                            ),
+                                          ),
+                                          onEditingComplete: () {
+                                            FocusScope.of(context).requestFocus(emailFocusNode);
+                                          },
+                                          validator: _validateUserName,
+                                          onSaved: (value) {
+                                            loginUserData.name = value;
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
                                       SizedBox(
                                         height: 8,
                                       ),
                                       new Container(
                                         child: TextFormField(
-                                          controller: phoneController,
+                                          // controller: ,
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: ConstanceData.SIZE_TITLE16,
@@ -510,81 +568,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
-  Widget _buildGenderPickerDemo(BuildContext context) {
-    final FixedExtentScrollController scrollController = FixedExtentScrollController(initialItem: genderListIndex);
-    return Container(
-      child: InkWell(
-        onTap: () async {
-          await showCupertinoModalPopup<void>(
-            context: context,
-            builder: (BuildContext context) {
-              return _buildBottomPicker(
-                CupertinoPicker(
-                  scrollController: scrollController,
-                  itemExtent: 44,
-                  backgroundColor: CupertinoColors.white,
-                  onSelectedItemChanged: (int index) {
-                    setState(() => genderListIndex = index);
-                  },
-                  children: List<Widget>.generate(genderList.length, (int index) {
-                    return Center(
-                      child: Text(genderList[index][0].toUpperCase() + genderList[index].substring(1).toLowerCase()),
-                    );
-                  }),
-                ),
-              );
-            },
-          ).then((t) {
-            selectedGender = genderList[genderListIndex];
-          });
-        },
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.only(left: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        'Gender',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE12,
-                          color: HexColor('#8C8C8C'),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        genderList[genderListIndex][0].toUpperCase() + genderList[genderListIndex].substring(1).toLowerCase(),
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 12),
-                      child: Container(
-                        height: 1.2,
-                        color: HexColor('#8C8C8C'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildBottomPicker(Widget picker) {
     return Container(
       height: 216.0,
@@ -621,28 +604,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   void _submit() async {
-  //  var  auth = FirebaseAuth.instance.currentUser!.email;
-    FocusScope.of(context).requestFocus(FocusNode());
+   var  auth = FirebaseAuth.instance.currentUser!.email;
+   
+try {
+   await FirebaseFirestore.instance.collection('UsersData').doc(auth).update({
+      "Username": userNameController.text,
+      "DateofBirth" : dobcontroller.text,
+      "Gender" : Gendercontroller.text,
 
-    if (_formKey.currentState!.validate() == false) {
-      return;
-    }
-    if (DateTime.now().difference(date).inDays < 6570) {
-      showInSnackBar("Please!, Enter your valid birth date.");
-      return;
-    }
-// try {
-//    await FirebaseFirestore.instance.collection('UsersData').doc(auth).update({
-//       "Username": userNameController.text,
-//       "DateofBirth" : date.toString(),
-//       "Gender" : genderListIndex.toString(),
-
-//     });
-//     Navigator.pop(context);
-// }
-// catch(e){
-//   showInSnackBar( e.toString());
-// }
+    });
+    Navigator.pop(context);
+}
+catch(e){
+  showInSnackBar( e.toString());
+}
 
     
 

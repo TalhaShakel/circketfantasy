@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:tempalteflutter/api/api.dart';
 import 'package:tempalteflutter/constance/constance.dart';
 import 'package:tempalteflutter/constance/sharedPreferences.dart';
 import 'package:tempalteflutter/constance/themes.dart';
+import 'package:tempalteflutter/models/mymatchmodel.dart';
 import 'package:tempalteflutter/models/userData.dart';
 import 'package:tempalteflutter/modules/drawer/drawer.dart';
 import 'package:tempalteflutter/modules/home/homeScreen.dart';
@@ -172,69 +174,27 @@ class _FixturesState extends State<Fixtures> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ListView(
-        padding: EdgeInsets.only(top: 4),
-        physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          MatchesList(
-            titel: "BYJU's jharkhand T20",
-            country1Name: "South Africa",
-            country2Name: "India",
-            country1Flag: 'assets/19.png',
-            country2Flag: 'assets/25.png',
-            price: "₹2 Lakhs",
-            time: '10m 13s',
-          ),
-          MatchesList(
-            titel: 'Fancode ECS T10-Sweden',
-            country1Name: "Sri Lnka",
-            country2Name: "Bangladesh",
-            country1Flag: 'assets/21.png',
-            country2Flag: 'assets/23.png',
-            price: "₹1 Lakhs",
-            time: '18m 21s',
-          ),
-          MatchesList(
-            titel: 'ICC Cricket World Cup',
-            country1Name: "Pakistan",
-            country2Name: "West Indies",
-            country1Flag: 'assets/13.png',
-            country2Flag: 'assets/17.png',
-            price: "₹2 Lakhs",
-            time: 'Fri, 13 Aug',
-          ),
-          MatchesList(
-            titel: 'English One-Day Cup',
-            country1Name: "South Africa",
-            country2Name: "India",
-            country1Flag: 'assets/19.png',
-            country2Flag: 'assets/25.png',
-            price: "₹50000",
-            time: 'Mon, 9 Sep',
-          ),
-          MatchesList(
-            titel: 'Fancode ECS T10-Sweden',
-            country1Name: "Sri Lnka",
-            country2Name: "Bangladesh",
-            country1Flag: 'assets/21.png',
-            country2Flag: 'assets/23.png',
-            price: "₹1 Lakhs",
-            time: '18m 21s',
-          ),
-          MatchesList(
-            titel: 'ICC Cricket World Cup',
-            country1Name: "Pakistan",
-            country2Name: "West Indies",
-            country1Flag: 'assets/13.png',
-            country2Flag: 'assets/17.png',
-            price: "₹2 Lakhs",
-            time: 'Fri, 13 Aug',
-          ),
-          SizedBox(
-            height: 70,
-          )
-        ],
-      ),
+       child: FutureBuilder<MatchModel>(
+                    future: Apiclass().fetchData(), // Call your fetchData function
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator()); // Show a loading indicator while waiting
+                      } else if (snapshot.hasError) {
+              return Center(child: Text('OOPs!: ${snapshot.error}'));
+                      } else if (!snapshot.hasData) {
+              return Center(child: Text('No data available'));
+                      } else {
+              // Display the data on the screen
+              return ListView.builder(
+                itemCount: snapshot.data!.data!.length,
+                itemBuilder: (context, index) {
+                  final match = snapshot.data!.data![index];
+                  return listItems(match.venu!.trimRight(), match.team1, match.team2, match.team1img, match.team2img, match.time,match.venu,match.series);
+                },
+              );
+                      }
+                    },
+                  ),
     );
   }
 }
@@ -281,34 +241,10 @@ class _LiveState extends State<Live> {
               SizedBox(
                 height: 8,
               ),
+            
               MatchesList(
-                titel: 'ICC Cricket World Cup',
-                country1Name: "Pakistan",
-                country2Name: "West Indies",
-                country1Flag: 'assets/13.png',
-                country2Flag: 'assets/17.png',
-                price: "₹2 Lakhs",
-                time: 'Fri, 13 Aug',
-              ),
-              MatchesList(
-                titel: 'Fancode ECS T10-Sweden',
-                country1Name: "Sri Lnka",
-                country2Name: "Bangladesh",
-                country1Flag: 'assets/21.png',
-                country2Flag: 'assets/23.png',
-                price: "₹1 Lakhs",
-                time: '18m 21s',
-              ),
-              MatchesList(
-                titel: 'English One-Day Cup',
-                country1Name: "South Africa",
-                country2Name: "India",
-                country1Flag: 'assets/19.png',
-                country2Flag: 'assets/25.png',
-                price: "₹50000",
-                time: 'Mon, 9 Sep',
-              ),
-              MatchesList(
+                series: "",
+                venu: "",
                 titel: 'ICC Cricket World Cup',
                 country1Name: "Pakistan",
                 country2Name: "West Indies",
@@ -350,33 +286,8 @@ class _ResultsState extends State<Results> {
                 country2Flag: 'assets/25.png',
                 price: "1 contest joined",
                 time: 'Completed',
-              ),
-              MatchesList(
-                titel: 'Fancode ECS T10-Sweden',
-                country1Name: "Sri Lnka",
-                country2Name: "Bangladesh",
-                country1Flag: 'assets/21.png',
-                country2Flag: 'assets/23.png',
-                price: "15 contest joined",
-                time: 'Completed',
-              ),
-              MatchesList(
-                titel: 'ICC Cricket World Cup',
-                country1Name: "Pakistan",
-                country2Name: "West Indies",
-                country1Flag: 'assets/13.png',
-                country2Flag: 'assets/17.png',
-                price: "8 contest joined",
-                time: 'Completed',
-              ),
-              MatchesList(
-                titel: 'English One-Day Cup',
-                country1Name: "South Africa",
-                country2Name: "India",
-                country1Flag: 'assets/19.png',
-                country2Flag: 'assets/25.png',
-                price: "12 contest joined",
-                time: 'Completed',
+                series: '',
+                venu: '',
               ),
               SizedBox(
                 height: 70,
@@ -397,6 +308,8 @@ class MatchesList extends StatefulWidget {
   final String? country2Flag;
   final String? time;
   final String? price;
+  final String? venu;
+  final String? series;
 
   const MatchesList({
     Key? key,
@@ -405,6 +318,8 @@ class MatchesList extends StatefulWidget {
     this.country2Name,
     this.time,
     this.price,
+    this.venu,
+    this.series,
     this.country1Flag,
     this.country2Flag,
   }) : super(key: key);
@@ -440,13 +355,14 @@ class _MatchesListState extends State<MatchesList> {
             BuildContext context,
           ) =>
               UnderGroundDrawer(
-            country1Flag: widget.country1Flag,
-            country2Flag: widget.country2Flag,
-            country1Name: widget.country1Name,
-            country2Name: widget.country2Name,
-            price: widget.price,
-            time: widget.time,
-            titel: widget.titel,
+            country1Flag: widget.country1Flag!,
+            country2Flag: widget.country2Flag!,
+            country1Name: widget.country1Name!,
+            country2Name: widget.country2Name!,
+            time: widget.time!,
+            titel: widget.titel!,
+            series: widget.series!,
+            venu: widget.venu!,
           ),
         );
       },
@@ -464,14 +380,18 @@ class _MatchesListState extends State<MatchesList> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        widget.titel!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE12,
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).disabledColor,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width/1.5,
+                        child: Text(
+                          widget.titel!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'Poppins',
+                            fontSize: ConstanceData.SIZE_TITLE12,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).disabledColor,
+                          ),
                         ),
                       ),
                       Expanded(child: SizedBox()),
@@ -520,34 +440,23 @@ class _MatchesListState extends State<MatchesList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset(widget.country1Flag!),
-                      ),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 3,
-                            backgroundColor: Colors.green,
-                          ),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            widget.time!,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: ConstanceData.SIZE_TITLE12,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
+                      CircleAvatar(
+                       
+                        backgroundImage: NetworkImage(widget.country1Flag!,),
                       ),
                       Container(
-                        width: 50,
-                        height: 50,
-                        child: Image.asset(widget.country2Flag!),
+                        child: Text(
+                          widget.time!,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: ConstanceData.SIZE_TITLE12,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      CircleAvatar(
+                       
+                        backgroundImage: NetworkImage(widget.country2Flag!,),
                       ),
                     ],
                   ),
@@ -556,7 +465,9 @@ class _MatchesListState extends State<MatchesList> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: AllCoustomTheme.isLight ? HexColor("#f5f5f5") : Theme.of(context).disabledColor.withOpacity(0.1),
+                color: AllCoustomTheme.isLight
+                    ? HexColor("#f5f5f5")
+                    : Theme.of(context).disabledColor.withOpacity(0.1),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
@@ -610,6 +521,7 @@ class _MatchesListState extends State<MatchesList> {
   }
 }
 
+
 class PersistentHeader extends SliverPersistentHeaderDelegate {
   final TabController controller;
 
@@ -654,3 +566,17 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
+
+  Widget listItems(title, t1, t2, tt1, tt2, time,venu,series) {
+    return MatchesList(
+      titel: title,
+      country1Name: t1,
+      country2Name: t2,
+      country1Flag: tt1,
+      country2Flag: tt2,
+      price: "₹2 Lakhs",
+      time: time,
+      venu: venu,
+      series: series,
+    );
+  }

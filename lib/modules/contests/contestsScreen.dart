@@ -47,7 +47,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
   bool tab3 = false;
   @override
   void initState() {
-    categoryList.contestsCategoryLeagueListData = <ContestsLeagueCategoryListResponseData>[];
+    categoryList.contestsCategoryLeagueListData =
+        <ContestsLeagueCategoryListResponseData>[];
     categoryList.teamlist = [];
     categoryList.totalcontest = 0;
     super.initState();
@@ -76,7 +77,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
               SafeArea(
                 child: Scaffold(
                   key: _scaffoldKey,
-                  backgroundColor: AllCoustomTheme.getThemeData().backgroundColor,
+                  backgroundColor:
+                      AllCoustomTheme.getThemeData().backgroundColor,
                   body: Stack(
                     alignment: AlignmentDirectional.bottomCenter,
                     children: <Widget>[
@@ -97,8 +99,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                             Navigator.pop(context);
                                           },
                                           child: Container(
-                                            width: AppBar().preferredSize.height,
-                                            height: AppBar().preferredSize.height,
+                                            width:
+                                                AppBar().preferredSize.height,
+                                            height:
+                                                AppBar().preferredSize.height,
                                             child: Icon(
                                               Icons.arrow_back,
                                               color: Colors.white,
@@ -106,10 +110,14 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           ),
                                         ),
                                       ),
-                                      Expanded(
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
                                         child: Text(
                                           widget.titel!,
                                           style: TextStyle(
+                                            overflow: TextOverflow.fade,
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w500,
                                             color: Colors.white,
@@ -227,8 +235,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                         "Contest",
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: ConstanceData.SIZE_TITLE16,
-                          color: tab1 ? AllCoustomTheme.getThemeData().primaryColor : AllCoustomTheme.getTextThemeColors(),
+                          fontSize: ConstanceData.SIZE_TITLE12,
+                          color: tab1
+                              ? AllCoustomTheme.getThemeData().primaryColor
+                              : AllCoustomTheme.getTextThemeColors(),
                         ),
                       ),
                       SizedBox(
@@ -237,7 +247,9 @@ class _ContestsScreenState extends State<ContestsScreen> {
                       Container(
                         height: 2,
                         width: 80,
-                        color: tab1 ? AllCoustomTheme.getThemeData().primaryColor : AllCoustomTheme.getThemeData().backgroundColor,
+                        color: tab1
+                            ? AllCoustomTheme.getThemeData().primaryColor
+                            : AllCoustomTheme.getThemeData().backgroundColor,
                       )
                     ],
                   ),
@@ -257,7 +269,9 @@ class _ContestsScreenState extends State<ContestsScreen> {
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: ConstanceData.SIZE_TITLE16,
-                          color: tab2 ? AllCoustomTheme.getThemeData().primaryColor : AllCoustomTheme.getTextThemeColors(),
+                          color: tab2
+                              ? AllCoustomTheme.getThemeData().primaryColor
+                              : AllCoustomTheme.getTextThemeColors(),
                         ),
                       ),
                       SizedBox(
@@ -266,7 +280,9 @@ class _ContestsScreenState extends State<ContestsScreen> {
                       Container(
                         height: 2,
                         width: 80,
-                        color: tab2 ? AllCoustomTheme.getThemeData().primaryColor : AllCoustomTheme.getThemeData().backgroundColor,
+                        color: tab2
+                            ? AllCoustomTheme.getThemeData().primaryColor
+                            : AllCoustomTheme.getThemeData().backgroundColor,
                       )
                     ],
                   ),
@@ -286,7 +302,9 @@ class _ContestsScreenState extends State<ContestsScreen> {
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: ConstanceData.SIZE_TITLE16,
-                          color: tab3 ? AllCoustomTheme.getThemeData().primaryColor : AllCoustomTheme.getTextThemeColors(),
+                          color: tab3
+                              ? AllCoustomTheme.getThemeData().primaryColor
+                              : AllCoustomTheme.getTextThemeColors(),
                         ),
                       ),
                       SizedBox(
@@ -295,7 +313,9 @@ class _ContestsScreenState extends State<ContestsScreen> {
                       Container(
                         height: 2,
                         width: 80,
-                        color: tab3 ? AllCoustomTheme.getThemeData().primaryColor : AllCoustomTheme.getThemeData().backgroundColor,
+                        color: tab3
+                            ? AllCoustomTheme.getThemeData().primaryColor
+                            : AllCoustomTheme.getThemeData().backgroundColor,
                       )
                     ],
                   ),
@@ -315,10 +335,12 @@ class _ContestsScreenState extends State<ContestsScreen> {
                       itemBuilder: (context, index) {
                         return StickyHeader(
                           header: new Container(
-                            color: AllCoustomTheme.getThemeData().scaffoldBackgroundColor,
+                            color: AllCoustomTheme.getThemeData()
+                                .scaffoldBackgroundColor,
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 4, bottom: 6, left: 8),
+                              padding: const EdgeInsets.only(
+                                  top: 4, bottom: 6, left: 8),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -333,7 +355,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                     'The Ultimate Face Off',
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
-                                      color: AllCoustomTheme.getThemeData().primaryColor,
+                                      color: AllCoustomTheme.getThemeData()
+                                          .primaryColor,
                                       fontSize: ConstanceData.SIZE_TITLE12,
                                     ),
                                   ),
@@ -342,10 +365,12 @@ class _ContestsScreenState extends State<ContestsScreen> {
                             ),
                           ),
                           content: Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8, top: 6, bottom: 100),
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, top: 6, bottom: 100),
                             child: Column(
                               children: <Widget>[
-                                contestnt('₹1000', '₹575', '2', '1 spot', "1", 0.2),
+                                contestnt(
+                                    '₹1000', '₹575', '2', '1 spot', "1", 0.2),
                                 SizedBox(
                                   height: 8,
                                 ),
@@ -353,7 +378,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                contestnt('₹100', '₹55', '1', '1 spot', "3", 0.8),
+                                contestnt(
+                                    '₹100', '₹55', '1', '1 spot', "3", 0.8),
                               ],
                             ),
                           ),
@@ -361,7 +387,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 140, left: 16, right: 16),
+                      padding:
+                          EdgeInsets.only(bottom: 140, left: 16, right: 16),
                       child: Container(
                         height: 40,
                         child: Row(
@@ -376,33 +403,44 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                   borderRadius: new BorderRadius.circular(20),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
-                                        color: AllCoustomTheme.getThemeData().primaryColor.withOpacity(0.5), offset: Offset(0, 1), blurRadius: 5.0),
+                                        color: AllCoustomTheme.getThemeData()
+                                            .primaryColor
+                                            .withOpacity(0.5),
+                                        offset: Offset(0, 1),
+                                        blurRadius: 5.0),
                                   ],
                                 ),
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
-                                    splashColor: AllCoustomTheme.getThemeData().primaryColor.withOpacity(0.4),
+                                    splashColor: AllCoustomTheme.getThemeData()
+                                        .primaryColor
+                                        .withOpacity(0.4),
                                     borderRadius: new BorderRadius.circular(20),
                                     onTap: () async {
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => ContestCodeScreen(),
+                                          builder: (context) =>
+                                              ContestCodeScreen(),
                                           fullscreenDialog: true,
                                         ),
                                       );
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.only(left: 8, right: 8),
+                                      padding:
+                                          EdgeInsets.only(left: 8, right: 8),
                                       child: Center(
                                         child: Text(
                                           'Enter Contest Code',
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getThemeData().primaryColor,
-                                            fontSize: ConstanceData.SIZE_TITLE10,
+                                            color:
+                                                AllCoustomTheme.getThemeData()
+                                                    .primaryColor,
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE10,
                                           ),
                                         ),
                                       ),
@@ -419,19 +457,26 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                   borderRadius: new BorderRadius.circular(20),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
-                                        color: AllCoustomTheme.getThemeData().primaryColor.withOpacity(0.5), offset: Offset(0, 1), blurRadius: 5.0),
+                                        color: AllCoustomTheme.getThemeData()
+                                            .primaryColor
+                                            .withOpacity(0.5),
+                                        offset: Offset(0, 1),
+                                        blurRadius: 5.0),
                                   ],
                                 ),
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
-                                    splashColor: AllCoustomTheme.getThemeData().primaryColor.withOpacity(0.4),
+                                    splashColor: AllCoustomTheme.getThemeData()
+                                        .primaryColor
+                                        .withOpacity(0.4),
                                     borderRadius: new BorderRadius.circular(20),
                                     onTap: () async {
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => CreateContestScreen(
+                                          builder: (context) =>
+                                              CreateContestScreen(
                                             country1Flag: widget.country1Flag!,
                                             country2Flag: widget.country2Flag!,
                                             country1Name: widget.country1Name!,
@@ -445,15 +490,19 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                       );
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.only(left: 8, right: 8),
+                                      padding:
+                                          EdgeInsets.only(left: 8, right: 8),
                                       child: Center(
                                         child: Text(
                                           'Create a Contest',
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getThemeData().primaryColor,
-                                            fontSize: ConstanceData.SIZE_TITLE10,
+                                            color:
+                                                AllCoustomTheme.getThemeData()
+                                                    .primaryColor,
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE10,
                                           ),
                                         ),
                                       ),
@@ -509,22 +558,28 @@ class _ContestsScreenState extends State<ContestsScreen> {
                       ),
                       Container(
                         height: 50,
-                        padding: EdgeInsets.only(left: 50, right: 50, bottom: 8),
+                        padding:
+                            EdgeInsets.only(left: 50, right: 50, bottom: 8),
                         child: Row(
                           children: <Widget>[
                             Flexible(
                               child: Container(
                                 decoration: new BoxDecoration(
-                                  color: AllCoustomTheme.getThemeData().primaryColor,
+                                  color: AllCoustomTheme.getThemeData()
+                                      .primaryColor,
                                   borderRadius: new BorderRadius.circular(4.0),
                                   boxShadow: <BoxShadow>[
-                                    BoxShadow(color: Colors.black.withOpacity(0.5), offset: Offset(0, 1), blurRadius: 5.0),
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.5),
+                                        offset: Offset(0, 1),
+                                        blurRadius: 5.0),
                                   ],
                                 ),
                                 child: Material(
                                   color: Colors.transparent,
                                   child: InkWell(
-                                    borderRadius: new BorderRadius.circular(4.0),
+                                    borderRadius:
+                                        new BorderRadius.circular(4.0),
                                     onTap: () async {
                                       Navigator.pop(context);
                                     },
@@ -555,7 +610,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Card(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)),
                               child: Column(
                                 children: [
                                   Padding(
@@ -575,7 +631,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             color: Colors.orange,
-                                            fontSize: ConstanceData.SIZE_TITLE14,
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE14,
                                           ),
                                         )
                                       ],
@@ -591,7 +648,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           topLeft: Radius.circular(13),
                                           topRight: Radius.circular(13),
                                         ),
-                                        image: DecorationImage(image: AssetImage(ConstanceData.cricketGround), fit: BoxFit.cover)),
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                ConstanceData.cricketGround),
+                                            fit: BoxFit.cover)),
                                     child: Column(
                                       children: [
                                         Padding(
@@ -603,7 +663,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                 style: TextStyle(
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: ConstanceData.SIZE_TITLE14,
+                                                  fontSize: ConstanceData
+                                                      .SIZE_TITLE14,
                                                 ),
                                               ),
                                               Expanded(child: SizedBox()),
@@ -627,11 +688,14 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           height: 6,
                                         ),
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Text(
                                                   'SIN',
@@ -639,7 +703,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white,
-                                                    fontSize: ConstanceData.SIZE_TITLE14,
+                                                    fontSize: ConstanceData
+                                                        .SIZE_TITLE14,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -651,13 +716,15 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white,
-                                                    fontSize: ConstanceData.SIZE_TITLE14,
+                                                    fontSize: ConstanceData
+                                                        .SIZE_TITLE14,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Text(
                                                   'DHA',
@@ -665,7 +732,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white,
-                                                    fontSize: ConstanceData.SIZE_TITLE14,
+                                                    fontSize: ConstanceData
+                                                        .SIZE_TITLE14,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -677,7 +745,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                     fontFamily: 'Poppins',
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white,
-                                                    fontSize: ConstanceData.SIZE_TITLE14,
+                                                    fontSize: ConstanceData
+                                                        .SIZE_TITLE14,
                                                   ),
                                                 ),
                                               ],
@@ -685,22 +754,36 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                             Stack(
                                               children: [
                                                 Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
                                                       ConstanceData.dhoni,
                                                       height: 60,
                                                     ),
                                                     Container(
-                                                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(7)),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(7)),
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 4,
+                                                                bottom: 4,
+                                                                left: 8,
+                                                                right: 8),
                                                         child: Text(
                                                           'MS. Dhoni',
                                                           style: TextStyle(
-                                                            fontFamily: 'Poppins',
+                                                            fontFamily:
+                                                                'Poppins',
                                                             color: Colors.white,
-                                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                                            fontSize:
+                                                                ConstanceData
+                                                                    .SIZE_TITLE12,
                                                           ),
                                                         ),
                                                       ),
@@ -711,14 +794,16 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                   radius: 12,
                                                   backgroundColor: Colors.white,
                                                   child: CircleAvatar(
-                                                    backgroundColor: Colors.grey[300],
+                                                    backgroundColor:
+                                                        Colors.grey[300],
                                                     radius: 13,
                                                     child: Text(
                                                       'C',
                                                       style: TextStyle(
                                                         fontFamily: 'Poppins',
                                                         color: Colors.white,
-                                                        fontSize: ConstanceData.SIZE_TITLE12,
+                                                        fontSize: ConstanceData
+                                                            .SIZE_TITLE12,
                                                       ),
                                                     ),
                                                   ),
@@ -728,22 +813,36 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                             Stack(
                                               children: [
                                                 Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Image.asset(
                                                       ConstanceData.virat,
                                                       height: 60,
                                                     ),
                                                     Container(
-                                                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(7)),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(7)),
                                                       child: Padding(
-                                                        padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8, right: 8),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 4,
+                                                                bottom: 4,
+                                                                left: 8,
+                                                                right: 8),
                                                         child: Text(
                                                           'Virat Kohli',
                                                           style: TextStyle(
-                                                            fontFamily: 'Poppins',
+                                                            fontFamily:
+                                                                'Poppins',
                                                             color: Colors.white,
-                                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                                            fontSize:
+                                                                ConstanceData
+                                                                    .SIZE_TITLE12,
                                                           ),
                                                         ),
                                                       ),
@@ -754,14 +853,16 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                                   radius: 12,
                                                   backgroundColor: Colors.white,
                                                   child: CircleAvatar(
-                                                    backgroundColor: Colors.grey[300],
+                                                    backgroundColor:
+                                                        Colors.grey[300],
                                                     radius: 13,
                                                     child: Text(
                                                       'VC',
                                                       style: TextStyle(
                                                         fontFamily: 'Poppins',
                                                         color: Colors.white,
-                                                        fontSize: ConstanceData.SIZE_TITLE12,
+                                                        fontSize: ConstanceData
+                                                            .SIZE_TITLE12,
                                                       ),
                                                     ),
                                                   ),
@@ -785,8 +886,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         SizedBox(
@@ -797,8 +900,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         Expanded(child: SizedBox()),
@@ -807,8 +912,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         SizedBox(
@@ -819,8 +926,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         Expanded(child: SizedBox()),
@@ -829,8 +938,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         SizedBox(
@@ -841,8 +952,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         Expanded(child: SizedBox()),
@@ -851,8 +964,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         SizedBox(
@@ -863,8 +978,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.bold,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                            fontSize: ConstanceData.SIZE_TITLE12,
+                                            color: AllCoustomTheme
+                                                .getTextThemeColors(),
+                                            fontSize:
+                                                ConstanceData.SIZE_TITLE12,
                                           ),
                                         ),
                                         Expanded(child: SizedBox()),
@@ -998,7 +1115,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, top: 4, bottom: 4),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, top: 4, bottom: 4),
                             child: Text(
                               txt2,
                               style: TextStyle(
@@ -1022,7 +1140,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
               lineHeight: 6,
               percent: progress,
               linearStrokeCap: LinearStrokeCap.roundAll,
-              backgroundColor: AllCoustomTheme.getThemeData().scaffoldBackgroundColor,
+              backgroundColor:
+                  AllCoustomTheme.getThemeData().scaffoldBackgroundColor,
               progressColor: AllCoustomTheme.getThemeData().primaryColor,
             ),
             Padding(
@@ -1053,7 +1172,9 @@ class _ContestsScreenState extends State<ContestsScreen> {
             ),
             Container(
               decoration: BoxDecoration(
-                color: AllCoustomTheme.isLight ? HexColor("#f5f5f5") : Theme.of(context).disabledColor.withOpacity(0.1),
+                color: AllCoustomTheme.isLight
+                    ? HexColor("#f5f5f5")
+                    : Theme.of(context).disabledColor.withOpacity(0.1),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
                   bottomRight: Radius.circular(8),
@@ -1107,7 +1228,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w500,
-                                  color: AllCoustomTheme.getThemeData().primaryColor,
+                                  color: AllCoustomTheme.getThemeData()
+                                      .primaryColor,
                                   fontSize: ConstanceData.SIZE_TITLE18,
                                 ),
                               ),
@@ -1141,7 +1263,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
+                  padding:
+                      const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -1152,7 +1275,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
-                            color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                            color:
+                                AllCoustomTheme.getBlackAndWhiteThemeColors(),
                             fontSize: ConstanceData.SIZE_TITLE14,
                           ),
                         ),
@@ -1172,7 +1296,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
+                  padding:
+                      const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -1183,7 +1308,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
-                            color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                            color:
+                                AllCoustomTheme.getBlackAndWhiteThemeColors(),
                             fontSize: ConstanceData.SIZE_TITLE14,
                           ),
                         ),
@@ -1206,7 +1332,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                   height: 1,
                 ),
                 Container(
-                  padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16, bottom: 8),
+                  padding: const EdgeInsets.only(
+                      top: 8, left: 16.0, right: 16, bottom: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -1250,7 +1377,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                             color: AllCoustomTheme.getThemeData().primaryColor,
                             borderRadius: new BorderRadius.circular(4.0),
                             boxShadow: <BoxShadow>[
-                              BoxShadow(color: Colors.black.withOpacity(0.5), offset: Offset(0, 1), blurRadius: 5.0),
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  offset: Offset(0, 1),
+                                  blurRadius: 5.0),
                             ],
                           ),
                           child: Material(
@@ -1286,7 +1416,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
-                      color: AllCoustomTheme.getTextThemeColors().withOpacity(0.5),
+                      color:
+                          AllCoustomTheme.getTextThemeColors().withOpacity(0.5),
                       fontSize: ConstanceData.SIZE_TITLE12,
                     ),
                   ),
@@ -1311,7 +1442,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
     categoryList.contestsCategoryLeagueListData!.forEach((category) {
       category.contestsCategoryLeagueListData!.forEach((list) {
         if (int.tryParse('${list.remainingTeam}') != 0) {
-          if (int.tryParse('${list.entryFees}') == int.tryParse('$price') && list.leagueId != leagueId) {
+          if (int.tryParse('${list.entryFees}') == int.tryParse('$price') &&
+              list.leagueId != leagueId) {
             leageData = list;
             return;
           }
@@ -1323,7 +1455,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
         category.contestsCategoryLeagueListData!.forEach((list) {
           if (int.tryParse('${list.remainingTeam}') != 0) {
             int? aa = int.tryParse('$price');
-            if (int.tryParse('${list.entryFees}')! <= aa! && list.leagueId != leagueId) {
+            if (int.tryParse('${list.entryFees}')! <= aa! &&
+                list.leagueId != leagueId) {
               leageData = list;
               return;
             }
@@ -1357,7 +1490,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
             "No worries, join this contest instead! It's exactly the same type",
             style: TextStyle(
               fontFamily: 'Poppins',
-              color: AllCoustomTheme.getBlackAndWhiteThemeColors().withOpacity(0.6),
+              color: AllCoustomTheme.getBlackAndWhiteThemeColors()
+                  .withOpacity(0.6),
               fontWeight: FontWeight.bold,
               fontSize: ConstanceData.SIZE_TITLE14,
             ),
@@ -1403,7 +1537,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                             "${leageData.totalWiningAmount}".toUpperCase(),
                             style: TextStyle(
                               fontFamily: 'Poppins',
-                              color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                              color:
+                                  AllCoustomTheme.getBlackAndWhiteThemeColors(),
                               fontWeight: FontWeight.bold,
                               fontSize: ConstanceData.SIZE_TITLE14,
                             ),
@@ -1509,7 +1644,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
                             "${leageData.entryFees}".toUpperCase(),
                             style: TextStyle(
                               fontFamily: 'Poppins',
-                              color: AllCoustomTheme.getBlackAndWhiteThemeColors(),
+                              color:
+                                  AllCoustomTheme.getBlackAndWhiteThemeColors(),
                               fontWeight: FontWeight.bold,
                               fontSize: ConstanceData.SIZE_TITLE14,
                             ),
@@ -1532,7 +1668,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                 color: AllCoustomTheme.getThemeData().primaryColor,
                 borderRadius: new BorderRadius.circular(4.0),
                 boxShadow: <BoxShadow>[
-                  BoxShadow(color: Colors.black.withOpacity(0.5), offset: Offset(0, 1), blurRadius: 5.0),
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: Offset(0, 1),
+                      blurRadius: 5.0),
                 ],
               ),
               child: Material(
@@ -1695,7 +1834,8 @@ class _ContestsScreenState extends State<ContestsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8),
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, bottom: 4, top: 8),
                 child: Text(
                   name,
                   style: TextStyle(
@@ -1709,7 +1849,10 @@ class _ContestsScreenState extends State<ContestsScreen> {
                 padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                 child: Text(
                   description,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: ConstanceData.SIZE_TITLE14, color: AllCoustomTheme.getTextThemeColors()),
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: ConstanceData.SIZE_TITLE14,
+                      color: AllCoustomTheme.getTextThemeColors()),
                 ),
               )
             ],
@@ -1753,16 +1896,14 @@ class _MatchHadderState extends State<MatchHadder> {
         children: <Widget>[
           Container(
             height: 36,
-            padding: EdgeInsets.only(left: 8, right: 8, bottom: 4, top: 4),
+            padding: EdgeInsets.only(bottom: 4, top: 4),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Container(
-                  width: 24,
-                  height: 24,
-                  child: Image.asset(widget.country1Flag!),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(widget.country1Flag!),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 8, right: 8),
                   child: Text(
                     widget.country1Name!,
                     textAlign: TextAlign.start,
@@ -1799,26 +1940,8 @@ class _MatchHadderState extends State<MatchHadder> {
                     ),
                   ),
                 ),
-                Container(
-                  width: 24,
-                  height: 24,
-                  child: Image.asset(widget.country2Flag!),
-                ),
-                Expanded(
-                  child: SizedBox(),
-                ),
-                Container(
-                  child: Text(
-                    widget.time!,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: HexColor(
-                        '#AAAFBC',
-                      ),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(widget.country2Flag!),
                 ),
               ],
             ),

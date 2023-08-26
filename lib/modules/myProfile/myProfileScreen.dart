@@ -2,20 +2,15 @@
 
 // ignore_for_file: unused_field
 
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tempalteflutter/api/apiProvider.dart';
-import 'package:tempalteflutter/api/logout.dart';
 import 'package:tempalteflutter/constance/constance.dart';
-import 'package:tempalteflutter/constance/routes.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:tempalteflutter/controller/controller.dart';
 import 'package:tempalteflutter/models/userData.dart';
@@ -40,10 +35,9 @@ class _MyProfileScreenState extends State<MyProfileScreen>
   var imageUrl = '';
   ScrollController _scrollController = new ScrollController();
 
-  
+
   var auth = FirebaseAuth.instance.currentUser!;
 
-  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -54,13 +48,19 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             color: AllCoustomTheme.getThemeData().primaryColor,
           ),
           SafeArea(
-            child: StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('UsersData')
-                    .doc(auth.email)
-                    .snapshots(),
+            child:StreamBuilder<DocumentSnapshot>(
+                stream:FirebaseFirestore.instance
+        .collection('UsersData')
+        .doc(auth.email)
+        .snapshots(),
                 builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
+                   if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator()); // Show a loading indicator while waiting
+                      } else if (snapshot.hasError) {
+              return Center(child: Text('OOPs!: ${snapshot.error}'));
+                      } else if (!snapshot.hasData) {
+              return Center(child: Text('No data available'));
+                      } else {
                     final userdata =
                         snapshot.data!.data() as Map<String, dynamic>;
                     return Scaffold(
@@ -80,8 +80,7 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                   sizeValue: 44,
                                   radius: 44,
                                   isCircle: true,
-                                  imageUrl: auth.displayName,
-                                      // "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1534&q=80",
+                                  imageUrl:  userdata["image"],
                                 ),
                               ),
                               SizedBox(
@@ -89,7 +88,6 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                               ),
                               Text(
                                 userdata["Username"],
-                                // data["Username"],
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 24,
@@ -191,7 +189,7 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                                     ),
                                                     Container(
                                                       child: Text(
-                                                        userdata["Username"],
+                                                       "  ${FirebaseAuth.instance.currentUser!.displayName}",
                                                         style: TextStyle(
                                                           fontFamily: 'Poppins',
                                                           fontSize:
@@ -500,9 +498,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                         ),
                       ),
                     );
-                  }
-                  return Center(child: CircularProgressIndicator(),);
-                }),
+                      
+   } }),
           )
         ],
       ),
