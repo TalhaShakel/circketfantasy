@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:provider/provider.dart';
 import 'package:tempalteflutter/constance/constance.dart';
+import 'package:tempalteflutter/constance/global.dart';
 import 'package:tempalteflutter/constance/themes.dart';
 import 'package:tempalteflutter/modules/drawer/drawer.dart';
 import 'package:tempalteflutter/modules/home/winner.dart';
@@ -26,13 +29,12 @@ class _TabScreenState extends State<TabScreen> {
   PersistentTabController? _controller;
   int currentIndex = 0;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
-  late bool hideNavBar = false;
 
   @override
   void initState() {
     super.initState();
     _controller = PersistentTabController();
-    global.isHideTabBar = hideNavBar = false;
+
     HomeScreen(
       menuCallBack: () {
         _scaffoldKey.currentState!.openEndDrawer();
@@ -137,56 +139,205 @@ class _TabScreenState extends State<TabScreen> {
       ),
     ];
   }
+    List screens = [
+    const HomeScreen(),
+    const StandingScree(),
+     MyProfileScreen(),
+    const MoreScreen(),
+  ];
+  final PageStorageBucket bucket = PageStorageBucket();
+  Widget currentScreen = HomeScreen();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: Container(
-        width: MediaQuery.of(context).size.width * 0.75,
-        child: AppDrawer(
-          mySettingClick: () {
-            setState(() {
-              currentIndex = 2;
-              _buildScreens();
-            });
+    var _bottomNavIndex = 0;
+    return Consumer(
+      builder:(context, value, child) =>  Scaffold(
+        key: _scaffoldKey,
+        drawer: Container(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: AppDrawer(
+            mySettingClick: () {
+              setState(() {
+                currentIndex = 2;
+                _buildScreens();
+              });
+            },
+            referralClick: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) => uderGroundDrawer(),
+              );
+            },
+          ),),
+           body: PageStorage(bucket: bucket, child: currentScreen),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AllCoustomTheme.getThemeData().primaryColor,
+          elevation: 0,
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  MyProfileScreen(),
+                ));
           },
-          referralClick: () {
-            showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) => uderGroundDrawer(),
-            );
-          },
+          child: const Icon(Icons.person,color: Colors.white,),
         ),
-      ),
-      body: PersistentTabView(
-        context,
-        controller: _controller,
-        backgroundColor: Theme.of(context).cardColor,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        stateManagement: true,
-        navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
-        hideNavigationBarWhenKeyboardShows: true,
-        margin: EdgeInsets.all(0.0),
-        popActionScreens: PopActionScreensType.all,
-        bottomScreenMargin: 0.0,
-        hideNavigationBar: global.isHideTabBar,
-        decoration: NavBarDecoration(colorBehindNavBar: Colors.indigo, borderRadius: BorderRadius.circular(0)),
-        popAllScreensOnTapOfSelectedTab: true,
-        itemAnimationProperties: ItemAnimationProperties(
-          duration: Duration(milliseconds: 400),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style15,
-      ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 10,
+          child: Container(
+            padding: const EdgeInsets.only(top: 8),
+            height: 60,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              // mainAxisSize: mainax,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    MaterialButton(
+
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const HomeScreen();
+                          _bottomNavIndex = 0;
+                        });
+                      },
+                      minWidth: 20,
+                      child: Column(
+                        children: [
+                          Icon(
+                           FontAwesomeIcons.home,
+                            color: AllCoustomTheme.getThemeData().primaryColor,
+                          ),
+                          Text(
+                            'home',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: AllCoustomTheme.getThemeData().primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const StandingScree();
+                          _bottomNavIndex = 1;
+                        });
+                      },
+                      minWidth: 20,
+                      child: Column(
+                        children: [
+                          Icon(
+                           FontAwesomeIcons.userAlt,
+                            color: AllCoustomTheme.getThemeData().primaryColor,
+                          ),
+                          Text(
+                            'My Match',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                             color: AllCoustomTheme.getThemeData().primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const Winner();
+                          _bottomNavIndex = 3;
+                        });
+                      },
+                      minWidth: 20,
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.military_tech,
+                            color: AllCoustomTheme.getThemeData().primaryColor,
+                          ),
+                          Text(
+                            'Winner',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                               color: AllCoustomTheme.getThemeData().primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          currentScreen = const MoreScreen();
+                          _bottomNavIndex = 3;
+                        });
+                      },
+                      minWidth: 20,
+                      child: Column(
+                        children: [
+                          Icon(
+                           FontAwesomeIcons.cog,
+                           color: AllCoustomTheme.getThemeData().primaryColor,
+                          ),
+                          Text(
+                            'Setting',
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                            color: AllCoustomTheme.getThemeData().primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ))
+  
+      //   ),
+      //   body: PersistentTabView(
+      //     context,
+      //     controller: _controller,
+      //     backgroundColor: Theme.of(context).cardColor,
+      //     screens: _buildScreens(),
+      //     items: _navBarsItems(),
+      //     handleAndroidBackButtonPress: true,
+      //     resizeToAvoidBottomInset: true,
+      //     stateManagement: true,
+      //     navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
+      //     hideNavigationBarWhenKeyboardShows: true,
+      //     margin: EdgeInsets.all(0.0),
+      //     popActionScreens: PopActionScreensType.all,
+      //     bottomScreenMargin: 0.0,
+      //     // hideNavigationBar: value.hideNavBar ,
+      //     decoration: NavBarDecoration(colorBehindNavBar: Colors.indigo, borderRadius: BorderRadius.circular(0)),
+      //     popAllScreensOnTapOfSelectedTab: true,
+      //     itemAnimationProperties: ItemAnimationProperties(
+      //       duration: Duration(milliseconds: 400),
+      //       curve: Curves.ease,
+      //     ),
+      //     screenTransitionAnimation: ScreenTransitionAnimation(
+      //       animateTabTransition: true,
+      //       curve: Curves.ease,
+      //       duration: Duration(milliseconds: 200),
+      //     ),
+      //     navBarStyle: NavBarStyle.style15,
+      //   ),
+      // ),
     );
   }
 
